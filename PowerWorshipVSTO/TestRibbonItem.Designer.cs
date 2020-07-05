@@ -62,6 +62,7 @@
             this.btnInsertScripture.Label = "Add Scripture";
             this.btnInsertScripture.Name = "btnInsertScripture";
             this.btnInsertScripture.ShowImage = true;
+            this.btnInsertScripture.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.btnInsertScripture_Click);
             // 
             // btnInsertSong
             // 
