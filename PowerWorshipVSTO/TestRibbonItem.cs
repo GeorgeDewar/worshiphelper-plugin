@@ -38,11 +38,11 @@ namespace PowerWorshipVSTO
         private void btnInsertScripture_Click(object sender, RibbonControlEventArgs e)
         {
             Application app = Globals.ThisAddIn.Application;
-            Presentation macroPresentation = app.Presentations.Open("C:\\Users\\Owner\\Documents\\BibleSlidePOC2.pptm", msoTrue, msoFalse, msoFalse);
+            Presentation templatePresentation = app.Presentations.Open(@"C:\PowerWorship\ScriptureTemplate.pptx", msoTrue, msoFalse, msoFalse);
 
             int maxHeight = 400;
 
-            macroPresentation.Slides[1].Copy();
+            templatePresentation.Slides[1].Copy();
             if (app.ActivePresentation.Slides.Count > 0)
             {
                 app.ActivePresentation.Windows[1].View.GotoSlide(app.ActivePresentation.Slides.Count);
