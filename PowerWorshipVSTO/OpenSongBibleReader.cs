@@ -27,7 +27,7 @@ namespace PowerWorshipVSTO
 
     class OpenSongBibleReader
     {
-        Bible load(String fileName)
+        public Bible load(String fileName)
         {
             var xml = XDocument.Load(fileName);
 

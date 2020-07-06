@@ -53,27 +53,25 @@ namespace PowerWorshipVSTO
             var objBodyTextBox = currentSlide.Shapes[2];
             var objDescTextBox = currentSlide.Shapes[3];
 
-            var reference = "Genesis 1:1-10 (HCSB)";
-            var verseList = new string[] {
-                "In the beginning God created the heavens and the earth."
-                , "Now the earth was formless and empty, darkness covered the surface of the watery depths, and the Spirit of God was hovering over the surface of the waters."
-                , "Then God said, \"Let there be light,\" and there was light."
-                , "God saw that the light was good, and God separated the light from the darkness."
-                , "God called the light \"day,\" and He called the darkness \"night.\" Evening came, and then morning: the first day."
-                , "Then God said, \"Let there be an expanse between the waters, separating water from water.\""
-                , "So God made the expanse and separated the water under the expanse from the water above the expanse. And it was so."
-                , "God called the expanse \"sky.\" Evening came, and then morning: the second day."
-                , "Then God said, \"Let the water under the sky be gathered into one place, and let the dry land appear.\" And it was so."
-                , "God called the dry land \"earth,\" and He called the gathering of the water \"seas.\" And God saw that it was good."
-            };
+            var translation = "NASB";
+            var bibleFile = @"C:\PowerWorship\Bibles\NASB.xmm";
+            var bible = new OpenSongBibleReader().load(bibleFile); // TODO: Inefficient to do this every time
+            var bookName = "Genesis";
+            var chapterNum = 1;
+            var verseNumStart = 1;
+            var verseNumEnd = 10;
+
+            var chapter = bible.books.Where(item => item.name == bookName).First().chapters.Where(item => item.number == chapterNum).First();
+            var verseList = chapter.verses.Where(verse => verse.number >= verseNumStart && verse.number <= verseNumEnd).OrderBy(verse => verse.number).ToList();
+            var reference = $"{bookName} {chapterNum}:{verseNumStart}-{verseNumEnd} ({translation})";
 
             objBodyTextBox.TextFrame.TextRange.Text = "";
             objDescTextBox.TextFrame.TextRange.Text = reference;
 
-            for (int i = 1; i < 10; i++)
+            for (int i = 0; i < 10; i++)
             {
                 var originalText = objBodyTextBox.TextFrame.TextRange.Text;
-                var verseText = "$" + i + " " + verseList[i] + " ";
+                var verseText = "$" + verseList[i].number + "$ " + verseList[i].text + " ";
                 objBodyTextBox.TextFrame.TextRange.Text = objBodyTextBox.TextFrame.TextRange.Text + verseText;
                 if (objBodyTextBox.Height > maxHeight) {
                     // We have overshot the space available on our slide, so *undo* the extra text insertion
@@ -93,12 +91,13 @@ namespace PowerWorshipVSTO
             for (int slideIndex = 1; slideIndex <= app.ActivePresentation.Slides.Count; slideIndex++) {
                 currentSlide = app.ActivePresentation.Slides[slideIndex];
                 objBodyTextBox = currentSlide.Shapes[2];
-                for (int j = 1; j < 10; j++) {
-                    string toFind = "$" + j.ToString();
+                foreach (Verse verse in verseList) {
+                    string toFind = "$" + verse.number + "$";
                     int verseIndex = objBodyTextBox.TextFrame.TextRange.Text.IndexOf(toFind);
                     if (verseIndex > -1) {
-                        objBodyTextBox.TextFrame.TextRange.Characters(verseIndex + 1, 2).Font.Superscript = msoTrue;
+                        objBodyTextBox.TextFrame.TextRange.Characters(verseIndex + 1, toFind.Length).Font.Superscript = msoTrue;
                         objBodyTextBox.TextFrame.TextRange.Characters(verseIndex + 1, 1).Delete();
+                        objBodyTextBox.TextFrame.TextRange.Characters(verseIndex + toFind.Length - 1, 1).Delete();
                     }
                 }
             }
