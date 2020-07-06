@@ -78,7 +78,7 @@ namespace PowerWorshipVSTO
                     objBodyTextBox.TextFrame.TextRange.Text = originalText;
 
                     // ... and move to a new slide
-                    currentSlide = app.ActivePresentation.Slides[1].Duplicate()[1];
+                    currentSlide = currentSlide.Duplicate()[1];
                     currentSlide.MoveTo(app.ActivePresentation.Slides.Count);
                     objBodyTextBox = currentSlide.Shapes[2];
                     objDescTextBox = currentSlide.Shapes[3];
