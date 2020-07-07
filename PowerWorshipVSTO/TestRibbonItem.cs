@@ -1,13 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Microsoft.Office.Core;
+﻿using Microsoft.Office.Core;
 using static Microsoft.Office.Core.MsoTriState;
-//using System.Windows.Forms;
 using Microsoft.Office.Tools.Ribbon;
 using Microsoft.Office.Interop.PowerPoint;
-//using Office = Microsoft.Office.Core;
 
 namespace PowerWorshipVSTO
 {

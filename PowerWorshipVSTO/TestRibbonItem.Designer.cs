@@ -1,8 +1,5 @@
 ﻿using Microsoft.Office.Core;
-using Microsoft.Office.Interop.PowerPoint;
-using static Microsoft.Office.Core.MsoTriState;
 using System.IO;
-using System.Drawing;
 
 namespace PowerWorshipVSTO
 {
@@ -16,22 +13,14 @@ namespace PowerWorshipVSTO
         public TestRibbonItem()
             : base(Globals.Factory.GetRibbonFactory())
         {
-            //Application app = Globals.ThisAddIn.Application;
-
             InitializeComponent();
+
             var mySlides = Factory.CreateRibbonGroup();
             mySlides.Label = "OneClick";
             tab1.Groups.Add(mySlides);
 
             foreach (string file in Directory.GetFiles($@"{ThisAddIn.appDataPath}\OneClick", "*.pptx"))
             {
-                //var thumbnailFile = Path.GetTempFileName();
-                //var presentation = app.Presentations.Open(file, msoTrue, msoFalse, msoFalse);
-                //var firstSlide = presentation.Slides[0];
-                //firstSlide.Export(thumbnailFile, "jpg", 320, 240);
-                //presentation.Close();
-
-
                 var slideButton = Factory.CreateRibbonButton();
                 mySlides.Items.Add(slideButton);
 
@@ -39,14 +28,10 @@ namespace PowerWorshipVSTO
                 var pathParts = file.Split(new char[] { '\\' });
                 slideButton.Label = pathParts[pathParts.Length - 1].Replace(".pptx", "");
                 slideButton.Tag = file;
-                //slideButton.Name = "btnInsert123";
-                //slideButton.Image = Image.FromFile(thumbnailFile);
                 var img = Properties.Resources.microsoft_powerpoint_computer_icons_clip_art_presentation_slide_vector_graphics_png_favpng_1fbdUWQVUmj03uyMzadXbfFG8;
                 slideButton.Image = img;
                 slideButton.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.btnInsertOneClick_Click);
             }
-
-            
         }
 
         /// <summary> 

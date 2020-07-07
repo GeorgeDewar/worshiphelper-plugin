@@ -207,13 +207,13 @@
     <AppDesigner Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\music-note-6.png" />
+    <None Include="Resources\music-note.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\22633-200.png" />
+    <None Include="Resources\bible.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\microsoft-powerpoint-computer-icons-clip-art-presentation-slide-vector-graphics-png-favpng-1fbdUWQVUmj03uyMzadXbfFG8.jpg" />
+    <None Include="Resources\powerpoint.jpg" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
