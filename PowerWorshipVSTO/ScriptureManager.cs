@@ -10,15 +10,16 @@ namespace PowerWorshipVSTO
 {
     class ScriptureManager
     {
+        int maxHeight = 400;
+
         public void addScripture(string bookName, int chapterNum, int verseNumStart, int verseNumEnd)
         {
             var verseCount = verseNumEnd - verseNumStart + 1;
 
             Application app = Globals.ThisAddIn.Application;
+            
+            // Copy the template from the template presentation, and close it
             Presentation templatePresentation = app.Presentations.Open(@"C:\PowerWorship\ScriptureTemplate.pptx", msoTrue, msoFalse, msoFalse);
-
-            int maxHeight = 400;
-
             templatePresentation.Slides[1].Copy();
             if (app.ActivePresentation.Slides.Count > 0)
             {
@@ -26,6 +27,7 @@ namespace PowerWorshipVSTO
             }
             app.ActivePresentation.Slides.Paste();
             var currentSlide = app.ActivePresentation.Slides[app.ActivePresentation.Slides.Count];
+            templatePresentation.Close();
 
             var objBodyTextBox = currentSlide.Shapes[2];
             var objDescTextBox = currentSlide.Shapes[3];

@@ -212,6 +212,9 @@
   <ItemGroup>
     <None Include="Resources\22633-200.png" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\microsoft-powerpoint-computer-icons-clip-art-presentation-slide-vector-graphics-png-favpng-1fbdUWQVUmj03uyMzadXbfFG8.jpg" />
+  </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>

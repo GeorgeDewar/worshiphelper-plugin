@@ -30,6 +30,7 @@ namespace PowerWorshipVSTO
                 {
                     var sourcePresentation = app.Presentations.Open(item, msoTrue, msoFalse, msoFalse);
                     sourcePresentation.Slides.Range().Copy();
+                    sourcePresentation.Close();
                     app.CommandBars.ExecuteMso("PasteSourceFormatting");
                 }
             }
@@ -38,6 +39,17 @@ namespace PowerWorshipVSTO
         private void btnInsertScripture_Click(object sender, RibbonControlEventArgs e)
         {
             new InsertScriptureForm().Show();
+        }
+
+        private void btnInsertOneClick_Click(object sender, RibbonControlEventArgs e)
+        {
+            Application app = Globals.ThisAddIn.Application;
+
+            var fileName = (sender as RibbonButton).Tag as string;
+            var sourcePresentation = app.Presentations.Open(fileName, msoTrue, msoFalse, msoFalse);
+            sourcePresentation.Slides.Range().Copy();
+            sourcePresentation.Close();
+            app.CommandBars.ExecuteMso("PasteSourceFormatting");
         }
     }
 }

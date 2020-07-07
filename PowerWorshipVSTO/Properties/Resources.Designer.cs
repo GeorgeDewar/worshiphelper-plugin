@@ -73,6 +73,17 @@ namespace PowerWorshipVSTO.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap microsoft_powerpoint_computer_icons_clip_art_presentation_slide_vector_graphics_png_favpng_1fbdUWQVUmj03uyMzadXbfFG8 {
+            get {
+                object obj = ResourceManager.GetObject("microsoft-powerpoint-computer-icons-clip-art-presentation-slide-vector-graphics-p" +
+                        "ng-favpng-1fbdUWQVUmj03uyMzadXbfFG8", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap music_note_6 {
             get {
                 object obj = ResourceManager.GetObject("music-note-6", resourceCulture);
