@@ -153,6 +153,7 @@
     can be found.
   -->
   <ItemGroup>
+    <Compile Include="ScriptureReference.cs" />
     <Compile Include="ScriptureManager.cs" />
     <Compile Include="InsertScriptureForm.cs">
       <SubType>Form</SubType>

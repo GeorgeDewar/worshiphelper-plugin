@@ -38,21 +38,6 @@ namespace PowerWorshipVSTO
             
         }
 
-        protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
-        {
-            var result = base.ProcessCmdKey(ref msg, keyData);
-
-            // If tab is pressed while a book name is being typed, after autocompletion add an extra space
-            //if (keyData == Keys.Tab && txtBook.Focused && txtBook.Text.Length > 0)
-            //{
-            //    txtBook.Text += " ";
-            //    txtBook.SelectionStart = txtBook.Text.Length;
-            //    txtBook.SelectionLength = 0;
-            //}
-
-            return result;
-        }
-
         private bool isValidReference()
         {
             var bookNames = bible.books.Select(book => book.name.ToLower()).ToList();
@@ -60,7 +45,21 @@ namespace PowerWorshipVSTO
             var validBook = bookNames.Contains(txtBook.Text.ToLower());
             var validReference = Regex.Match(txtReference.Text, "^[0-9]+(:[0-9]+(-[0-9]+)?)?$").Success;
 
-            return validBook && validReference;
+            if (validBook && validReference)
+            {
+                try
+                {
+                    ScriptureReference.parse(bible, txtBook.Text, txtReference.Text);
+                    return true;
+                } catch(Exception e)
+                {
+                    // This will happen if parsing fails due to a bad reference
+                    return false;
+                }
+            } else
+            {
+                return false;
+            }
         }
 
         private void btnInsert_Click(object sender, EventArgs e)
