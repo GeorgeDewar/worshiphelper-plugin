@@ -15,7 +15,7 @@ namespace PowerWorshipVSTO
             Application app = Globals.ThisAddIn.Application;
             
             // Copy the template from the template presentation, and close it
-            Presentation templatePresentation = app.Presentations.Open(@"C:\PowerWorship\ScriptureTemplate.pptx", msoTrue, msoFalse, msoFalse);
+            Presentation templatePresentation = app.Presentations.Open($@"{ThisAddIn.appDataPath}\ScriptureTemplate.pptx", msoTrue, msoFalse, msoFalse);
             templatePresentation.Slides[1].Copy();
             if (app.ActivePresentation.Slides.Count > 0)
             {
@@ -29,7 +29,7 @@ namespace PowerWorshipVSTO
             var objDescTextBox = currentSlide.Shapes[3];
 
             var translation = "NASB";
-            var bibleFile = @"C:\PowerWorship\Bibles\NASB.xmm";
+            var bibleFile = $@"{ThisAddIn.appDataPath}\Bibles\NASB.xmm";
             var bible = new OpenSongBibleReader().load(bibleFile); // TODO: Inefficient to do this every time
 
             var chapter = bible.books.Where(item => item.name == bookName).First().chapters.Where(item => item.number == chapterNum).First();

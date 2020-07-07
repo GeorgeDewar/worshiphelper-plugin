@@ -4,7 +4,7 @@ namespace PowerWorshipVSTO
 {
     public partial class ThisAddIn
     {
-        public static String appDataPath = "C:\\PowerWorship";
+        public static String appDataPath = $@"{Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments)}\PowerWorship";
 
         private void ThisAddIn_Startup(object sender, System.EventArgs e)
         {

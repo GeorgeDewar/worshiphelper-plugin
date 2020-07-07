@@ -18,7 +18,7 @@ namespace PowerWorshipVSTO
         public InsertScriptureForm()
         {
             InitializeComponent();
-            bible = new OpenSongBibleReader().load(@"C:\PowerWorship\Bibles\NASB.xmm");
+            bible = new OpenSongBibleReader().load($@"{ThisAddIn.appDataPath}\Bibles\NASB.xmm");
 
             var source = new AutoCompleteStringCollection();
             source.AddRange(bible.books.Select(book => book.name).ToArray());
