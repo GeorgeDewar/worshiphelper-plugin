@@ -16,17 +16,12 @@ namespace PowerWorshipVSTO
             
             // Copy the template from the template presentation, and close it
             Presentation templatePresentation = app.Presentations.Open($@"{ThisAddIn.appDataPath}\ScriptureTemplate.pptx", msoTrue, msoFalse, msoFalse);
-            templatePresentation.Slides[1].Copy();
-            if (app.ActivePresentation.Slides.Count > 0)
-            {
-                app.ActivePresentation.Windows[1].View.GotoSlide(app.ActivePresentation.Slides.Count);
-            }
-            app.ActivePresentation.Slides.Paste();
-            var currentSlide = app.ActivePresentation.Slides[app.ActivePresentation.Slides.Count];
+            var currentSlide = newSlideFromTemplate(templatePresentation);
             templatePresentation.Close();
 
             var objBodyTextBox = currentSlide.Shapes[2];
             var objDescTextBox = currentSlide.Shapes[3];
+            var originalFontSize = objBodyTextBox.TextFrame.TextRange.Font.Size;
 
             var translation = "NASB";
             var bibleFile = $@"{ThisAddIn.appDataPath}\Bibles\NASB.xmm";
@@ -39,6 +34,7 @@ namespace PowerWorshipVSTO
             objBodyTextBox.TextFrame.TextRange.Text = "";
             objDescTextBox.TextFrame.TextRange.Text = reference;
 
+            var newSlide = true;
             for (int i = 0; i < verseCount; i++)
             {
                 var originalText = objBodyTextBox.TextFrame.TextRange.Text;
@@ -46,16 +42,29 @@ namespace PowerWorshipVSTO
                 objBodyTextBox.TextFrame.TextRange.Text = objBodyTextBox.TextFrame.TextRange.Text + verseText;
                 if (objBodyTextBox.Height > maxHeight)
                 {
-                    // We have overshot the space available on our slide, so *undo* the extra text insertion
-                    objBodyTextBox.TextFrame.TextRange.Text = originalText;
+                    if (originalText == "")
+                    {
+                        // The verse is so long it cannot fit on the slide - make it smaller
+                        while(objBodyTextBox.Height > maxHeight)
+                        {
+                            objBodyTextBox.TextFrame.TextRange.Font.Size -= 1;
+                        }
+                    } else
+                    {
+                        // We have overshot the space available on our slide, so *undo* the extra text insertion
+                        objBodyTextBox.TextFrame.TextRange.Text = originalText;
 
-                    // ... and move to a new slide
-                    currentSlide = currentSlide.Duplicate()[1];
-                    currentSlide.MoveTo(app.ActivePresentation.Slides.Count);
-                    objBodyTextBox = currentSlide.Shapes[2];
-                    objDescTextBox = currentSlide.Shapes[3];
-                    objBodyTextBox.TextFrame.TextRange.Text = verseText;
-                    objDescTextBox.TextFrame.TextRange.Text = reference;
+                        // ... and move to a new slide
+                        currentSlide = currentSlide.Duplicate()[1];
+                        currentSlide.MoveTo(app.ActivePresentation.Slides.Count);
+                        objBodyTextBox = currentSlide.Shapes[2];
+                        objDescTextBox = currentSlide.Shapes[3];
+
+                        objBodyTextBox.TextFrame.TextRange.Font.Size = originalFontSize;
+                        objBodyTextBox.TextFrame.TextRange.Text = "";
+                        objDescTextBox.TextFrame.TextRange.Text = reference;
+                        i--;
+                    }
                 }
             }
 
@@ -76,6 +85,20 @@ namespace PowerWorshipVSTO
                     }
                 }
             }
+        }
+
+        private Slide newSlideFromTemplate(Presentation templatePresentation)
+        {
+            Application app = Globals.ThisAddIn.Application;
+
+            templatePresentation.Slides[1].Copy();
+            if (app.ActivePresentation.Slides.Count > 0)
+            {
+                app.ActivePresentation.Windows[1].View.GotoSlide(app.ActivePresentation.Slides.Count);
+            }
+            app.ActivePresentation.Slides.Paste();
+
+            return app.ActivePresentation.Slides[app.ActivePresentation.Slides.Count];
         }
     }
 }
