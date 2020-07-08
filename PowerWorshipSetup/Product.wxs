@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+  <Product Id="*" Name="PowerWorship" Language="1033" Version="0.1.0.0" Manufacturer="PowerWorship" UpgradeCode="cd4af055-5197-40b2-b7e7-ad60de11b453">
+		<Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" />
+
+    <MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed." />
+		<MediaTemplate EmbedCab="yes" />
+
+    <UIRef Id="WixUI_Minimal" />
+    
+    <Feature Id="ProductFeature" Title="PowerWorship" Level="1">
+      <ComponentGroupRef Id="ProductComponents" />
+      <ComponentRef Id="Registry_FriendlyName" />
+      <ComponentRef Id="Registry_Description" />
+      <ComponentRef Id="Registry_Manifest" />
+      <ComponentRef Id="Registry_LoadBehavior" />
+    </Feature>
+
+    <Property Id="VSTORUNTIMEREDIST">
+      <RegistrySearch
+        Id="VSTORuntimeRedist"
+        Root="HKLM"
+        Key="SOFTWARE\Microsoft\VSTO Runtime Setup\v4R"
+        Name="Version"
+        Type="raw" />
+    </Property>
+    <Condition
+      Message="The Visual Studio 2010 Tools for Office Runtime is not installed. 
+  Please download and install from 
+  http://www.microsoft.com/en-us/download/details.aspx?id=20479.">
+      <![CDATA[Installed OR VSTORUNTIMEREDIST>="10.0.30319"]]>
+    </Condition>
+
+    <!--<PropertyRef Id="NETFRAMEWORK40FULL"/>
+    <Condition Message="This application requires .NET Framework 4.0.">
+      <![CDATA[Installed OR NETFRAMEWORK40FULL]]>
+    </Condition>-->
+	</Product>
+
+	<Fragment>
+    <Directory Id="TARGETDIR" Name="SourceDir">
+      <Directory Id="ProgramFilesFolder">
+        <Directory Id="INSTALLFOLDER" Name="PowerWorship" />
+        <Component Id="Registry_FriendlyName">
+          <RegistryValue Id="RegKey_FriendlyName" Root="HKCU"
+                         Key="Software\Microsoft\Office\PowerPoint\Addins\PowerWorship"
+                         Name="FriendlyName"
+                         Value="PowerWorship"
+                         Type="string" KeyPath="yes" />
+        </Component>
+        <Component Id="Registry_Description">
+          <RegistryValue Id="RegKey_Description" Root="HKCU"
+                         Key="Software\Microsoft\Office\PowerPoint\Addins\PowerWorship"
+                         Name="Description"
+                         Value="Easily build service presentations for your church"
+                         Type="string" KeyPath="yes" />
+        </Component>
+        <Component Id="Registry_Manifest">
+          <RegistryValue Id="RegKey_Manifest" Root="HKCU"
+                         Key="Software\Microsoft\Office\PowerPoint\Addins\PowerWorship"
+                         Name="Manifest" Value="[INSTALLFOLDER]PowerWorshipVSTO.vsto|vstolocal"
+                         Type="string" KeyPath="yes" />
+        </Component>
+        <Component Id="Registry_LoadBehavior">
+          <RegistryValue Id="RegKey_LoadBehavior" Root="HKCU"
+                         Key="Software\Microsoft\Office\PowerPoint\Addins\PowerWorship"
+                         Name="LoadBehavior" Value="3"
+                         Type="integer" KeyPath="yes" />
+        </Component>
+      </Directory>
+    </Directory>
+	</Fragment>
+
+	<Fragment>
+		<ComponentGroup Id="ProductComponents" Directory="INSTALLFOLDER">
+      <Component Id="PowerWorship_vsto_Component">
+        <File Id="PowerWorship_vsto" KeyPath="yes"
+              Name="PowerWorshipVSTO.vsto" Source="$(var.PowerWorshipVSTO.TargetDir)"></File>
+      </Component>
+      <Component Id="PowerWorship_dll_Component" >
+        <File Id="PowerWorshipVSTO_dll" KeyPath="yes"
+              Name="PowerWorshipVSTO.dll" Source="$(var.PowerWorshipVSTO.TargetDir)" />
+      </Component>
+      <Component Id="PowerWorship_dll_manifest_Component">
+        <File Id="PowerWorshipVSTO_dll_manifest" KeyPath="yes"
+              Name="PowerWorshipVSTO.dll.manifest" Source="$(var.PowerWorshipVSTO.TargetDir)"></File>
+      </Component>
+      <Component Id="MSOfficeToolsCommon_dll_Component">
+        <File Id="MSOfficeToolsCommon_dll" KeyPath="yes"
+              Name="Microsoft.Office.Tools.Common.v4.0.Utilities.dll"
+              Source="$(var.PowerWorshipVSTO.TargetDir)"></File>
+      </Component>
+		</ComponentGroup>
+	</Fragment>
+</Wix>
