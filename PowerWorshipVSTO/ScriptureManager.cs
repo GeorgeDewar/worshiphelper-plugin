@@ -15,7 +15,7 @@ namespace PowerWorshipVSTO
             Application app = Globals.ThisAddIn.Application;
             
             // Copy the template from the template presentation, and close it
-            Presentation templatePresentation = app.Presentations.Open($@"{ThisAddIn.appDataPath}\ScriptureTemplate.pptx", msoTrue, msoFalse, msoFalse);
+            Presentation templatePresentation = app.Presentations.Open($@"{ThisAddIn.appDataPath}\Templates\ScriptureTemplate.pptx", msoTrue, msoFalse, msoFalse);
             var currentSlide = newSlideFromTemplate(templatePresentation);
             templatePresentation.Close();
 

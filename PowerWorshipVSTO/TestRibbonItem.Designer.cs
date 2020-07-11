@@ -14,23 +14,28 @@ namespace PowerWorshipVSTO
             : base(Globals.Factory.GetRibbonFactory())
         {
             InitializeComponent();
+            ThisAddIn.PreInitialize();
 
             var mySlides = Factory.CreateRibbonGroup();
             mySlides.Label = "OneClick";
             tab1.Groups.Add(mySlides);
 
-            foreach (string file in Directory.GetFiles($@"{ThisAddIn.appDataPath}\OneClick", "*.pptx"))
+            var oneClickPath = $@"{ThisAddIn.appDataPath}\OneClick";
+            if (Directory.Exists(oneClickPath))
             {
-                var slideButton = Factory.CreateRibbonButton();
-                mySlides.Items.Add(slideButton);
+                foreach (string file in Directory.GetFiles($@"{ThisAddIn.appDataPath}\OneClick", "*.pptx"))
+                {
+                    var slideButton = Factory.CreateRibbonButton();
+                    mySlides.Items.Add(slideButton);
 
-                slideButton.ControlSize = RibbonControlSize.RibbonControlSizeLarge;
-                var pathParts = file.Split(new char[] { '\\' });
-                slideButton.Label = pathParts[pathParts.Length - 1].Replace(".pptx", "");
-                slideButton.Tag = file;
-                var img = Properties.Resources.microsoft_powerpoint_computer_icons_clip_art_presentation_slide_vector_graphics_png_favpng_1fbdUWQVUmj03uyMzadXbfFG8;
-                slideButton.Image = img;
-                slideButton.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.btnInsertOneClick_Click);
+                    slideButton.ControlSize = RibbonControlSize.RibbonControlSizeLarge;
+                    var pathParts = file.Split(new char[] { '\\' });
+                    slideButton.Label = pathParts[pathParts.Length - 1].Replace(".pptx", "");
+                    slideButton.Tag = file;
+                    var img = Properties.Resources.microsoft_powerpoint_computer_icons_clip_art_presentation_slide_vector_graphics_png_favpng_1fbdUWQVUmj03uyMzadXbfFG8;
+                    slideButton.Image = img;
+                    slideButton.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.btnInsertOneClick_Click);
+                }
             }
         }
 
