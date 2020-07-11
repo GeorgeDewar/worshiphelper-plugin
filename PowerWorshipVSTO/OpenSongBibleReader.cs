@@ -7,6 +7,7 @@ namespace PowerWorshipVSTO
 {
     class Bible
     {
+        public string name { get; set; }
         public List<Book> books = new List<Book>();
     }
     class Book

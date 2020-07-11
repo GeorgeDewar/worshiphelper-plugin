@@ -8,7 +8,7 @@ namespace PowerWorshipVSTO
     {
         int maxHeight = 400;
 
-        public void addScripture(string bookName, int chapterNum, int verseNumStart, int verseNumEnd)
+        public void addScripture(Bible bible, string bookName, int chapterNum, int verseNumStart, int verseNumEnd)
         {
             var verseCount = verseNumEnd - verseNumStart + 1;
 
@@ -23,10 +23,7 @@ namespace PowerWorshipVSTO
             var objDescTextBox = currentSlide.Shapes[3];
             var originalFontSize = objBodyTextBox.TextFrame.TextRange.Font.Size;
 
-            var translation = "NASB";
-            var bibleFile = $@"{ThisAddIn.appDataPath}\Bibles\NASB.xmm";
-            var bible = new OpenSongBibleReader().load(bibleFile); // TODO: Inefficient to do this every time
-
+            var translation = bible.name;
             var chapter = bible.books.Where(item => item.name == bookName).First().chapters.Where(item => item.number == chapterNum).First();
             var verseList = chapter.verses.Where(verse => verse.number >= verseNumStart && verse.number <= verseNumEnd).OrderBy(verse => verse.number).ToList();
             var reference = $"{bookName} {chapterNum}:{verseNumStart}-{verseNumEnd} ({translation})";

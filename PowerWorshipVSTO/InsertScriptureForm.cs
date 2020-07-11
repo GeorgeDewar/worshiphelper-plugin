@@ -1,8 +1,10 @@
-﻿using System;
+﻿using Microsoft.Win32;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -18,7 +20,28 @@ namespace PowerWorshipVSTO
         public InsertScriptureForm()
         {
             InitializeComponent();
-            bible = new OpenSongBibleReader().load($@"{ThisAddIn.appDataPath}\Bibles\NASB.xmm");
+
+            var registryKey = Registry.CurrentUser.CreateSubKey(@"SOFTWARE\PowerWorship");
+            var lastBible = registryKey.GetValue("LastBibleTranslation") as string;
+
+            // Get a list of installed bibles
+            var installedBibleFiles = Directory.GetFiles($@"{ThisAddIn.appDataPath}\Bibles");
+            foreach (var file in installedBibleFiles)
+            {
+                var bibleName = file.Split(new char[] { '\\' }).Last().Replace(".xmm", "");
+                cmbTranslation.Items.Add(bibleName);
+                if (bibleName == lastBible)
+                {
+                    cmbTranslation.SelectedItem = bibleName;
+                }
+            }
+            if (cmbTranslation.SelectedItem == null)
+            {
+                cmbTranslation.SelectedIndex = 0;
+            }
+
+            // Initialise so that we can populate the books
+            setBible(cmbTranslation.SelectedItem as string);
 
             var source = new AutoCompleteStringCollection();
             source.AddRange(bible.books.Select(book => book.name).ToArray());
@@ -84,7 +107,7 @@ namespace PowerWorshipVSTO
                 verseNumEnd = chapter.verses.Last().number;
             }
 
-            new ScriptureManager().addScripture(book.name, chapterNum, verseNumStart, verseNumEnd);
+            new ScriptureManager().addScripture(bible, book.name, chapterNum, verseNumStart, verseNumEnd);
             this.Close();
         }
 
@@ -96,6 +119,23 @@ namespace PowerWorshipVSTO
         private void btnCancel_Click(object sender, EventArgs e)
         {
             this.Close();
+        }
+
+        private void cmbTranslation_SelectionChangeCommitted(object sender, EventArgs e)
+        {
+            var box = (sender as ComboBox);
+            var translationName = box.SelectedItem as string;
+
+            setBible(translationName);
+
+            var registryKey = Registry.CurrentUser.CreateSubKey(@"SOFTWARE\PowerWorship");
+            registryKey.SetValue("LastBibleTranslation", translationName);
+        }
+
+        private void setBible(string translationName)
+        {
+            bible = new OpenSongBibleReader().load($@"{ThisAddIn.appDataPath}\Bibles\{translationName}.xmm");
+            bible.name = translationName;
         }
     }
 }
