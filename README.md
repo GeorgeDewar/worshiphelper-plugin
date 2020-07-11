@@ -1,6 +1,8 @@
 # PowerWorship
 
-Effortlessly build your Sunday Morning slides by adding songs and bible readings
+***Note:** This project inadvertently shares the name of a similar product advertised at www.powerworship.com. They are not related and I will consider renaming this one.*
+
+Effortlessly build your Sunday Morning slides by adding songs and bible readings.
 
 PowerWorship is a PowerPoint plugin that streamlines the process of adding existing presentations (for example, songs) to a PowerPoint presentation. It also makes it effortless
 to add nicely formatted bible passages.
