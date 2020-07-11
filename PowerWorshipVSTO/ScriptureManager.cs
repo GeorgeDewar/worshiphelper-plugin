@@ -34,7 +34,7 @@ namespace PowerWorshipVSTO
             objBodyTextBox.TextFrame.TextRange.Text = "";
             objDescTextBox.TextFrame.TextRange.Text = reference;
 
-            var newSlide = true;
+            var startSlideIndex = app.ActivePresentation.Slides.Count;
             for (int i = 0; i < verseCount; i++)
             {
                 var originalText = objBodyTextBox.TextFrame.TextRange.Text;
@@ -67,9 +67,10 @@ namespace PowerWorshipVSTO
                     }
                 }
             }
+            var endSlideIndex = app.ActivePresentation.Slides.Count;
 
             // Find the verse numbers (prefixed with a $) and superscript them, and remove the $
-            for (int slideIndex = 1; slideIndex <= app.ActivePresentation.Slides.Count; slideIndex++)
+            for (int slideIndex = startSlideIndex; slideIndex <= endSlideIndex; slideIndex++)
             {
                 currentSlide = app.ActivePresentation.Slides[slideIndex];
                 objBodyTextBox = currentSlide.Shapes[2];
@@ -85,6 +86,8 @@ namespace PowerWorshipVSTO
                     }
                 }
             }
+
+            goToEnd();
         }
 
         private Slide newSlideFromTemplate(Presentation templatePresentation)
@@ -99,6 +102,13 @@ namespace PowerWorshipVSTO
             app.ActivePresentation.Slides.Paste();
 
             return app.ActivePresentation.Slides[app.ActivePresentation.Slides.Count];
+        }
+
+        // TODO: Move to common location
+        public static void goToEnd()
+        {
+            Application app = Globals.ThisAddIn.Application;
+            app.ActivePresentation.Windows[1].View.GotoSlide(app.ActivePresentation.Slides.Count);
         }
     }
 }

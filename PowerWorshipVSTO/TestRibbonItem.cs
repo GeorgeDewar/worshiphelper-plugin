@@ -23,6 +23,7 @@ namespace PowerWorshipVSTO
             
             FileDialog dialog = app.FileDialog[MsoFileDialogType.msoFileDialogOpen];
             dialog.Title = "Select Song or Presentation";
+            dialog.AllowMultiSelect = false;
             if (lastSongLocation != null) dialog.InitialFileName = lastSongLocation;
             if (dialog.Show() == -1) // If user selected a file
             {
@@ -34,6 +35,7 @@ namespace PowerWorshipVSTO
                     sourcePresentation.Slides.Range().Copy();
                     sourcePresentation.Close();
                     app.CommandBars.ExecuteMso("PasteSourceFormatting");
+                    ScriptureManager.goToEnd();
                 }
             }
         }
@@ -52,6 +54,7 @@ namespace PowerWorshipVSTO
             sourcePresentation.Slides.Range().Copy();
             sourcePresentation.Close();
             app.CommandBars.ExecuteMso("PasteSourceFormatting");
+            ScriptureManager.goToEnd();
         }
 
         private void btnRemoveOneClick_Click(object sender, RibbonControlEventArgs e)
@@ -85,11 +88,12 @@ namespace PowerWorshipVSTO
                 {
                     favRegistryKey.SetValue(item, item);
                 }
+                System.Windows.Forms.MessageBox.Show(
+                    "Your new favourite has been added, but it won't appear until you restart PowerPoint.",
+                    "Favourite added");
             }
 
-            System.Windows.Forms.MessageBox.Show(
-                "Your new favourite has been added, but it won't appear until you restart PowerPoint.",
-                "Favourite added");
+            
         }
     }
 }
