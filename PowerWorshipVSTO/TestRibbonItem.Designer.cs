@@ -1,4 +1,5 @@
 ﻿using Microsoft.Office.Core;
+using Microsoft.Win32;
 using System.IO;
 
 namespace PowerWorshipVSTO
@@ -16,27 +17,33 @@ namespace PowerWorshipVSTO
             InitializeComponent();
             ThisAddIn.PreInitialize();
 
-            var mySlides = Factory.CreateRibbonGroup();
-            mySlides.Label = "OneClick";
-            tab1.Groups.Add(mySlides);
-
-            var oneClickPath = $@"{ThisAddIn.appDataPath}\OneClick";
-            if (Directory.Exists(oneClickPath))
+            var favRegistryKey = Registry.CurrentUser.CreateSubKey(@"SOFTWARE\PowerWorship\Favourites");
+            foreach (string file in favRegistryKey.GetValueNames())
             {
-                foreach (string file in Directory.GetFiles($@"{ThisAddIn.appDataPath}\OneClick", "*.pptx"))
-                {
-                    var slideButton = Factory.CreateRibbonButton();
-                    mySlides.Items.Add(slideButton);
+                var slideButton = Factory.CreateRibbonSplitButton();
+                favouritesGroup.Items.Add(slideButton);
 
-                    slideButton.ControlSize = RibbonControlSize.RibbonControlSizeLarge;
-                    var pathParts = file.Split(new char[] { '\\' });
-                    slideButton.Label = pathParts[pathParts.Length - 1].Replace(".pptx", "");
-                    slideButton.Tag = file;
-                    var img = Properties.Resources.microsoft_powerpoint_computer_icons_clip_art_presentation_slide_vector_graphics_png_favpng_1fbdUWQVUmj03uyMzadXbfFG8;
-                    slideButton.Image = img;
-                    slideButton.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.btnInsertOneClick_Click);
-                }
+                slideButton.ControlSize = RibbonControlSize.RibbonControlSizeLarge;
+                var pathParts = file.Split(new char[] { '\\' });
+                slideButton.Label = pathParts[pathParts.Length - 1].Replace(".pptx", "").Replace(".ppt", "");
+                slideButton.Tag = file;
+                var img = Properties.Resources.microsoft_powerpoint_computer_icons_clip_art_presentation_slide_vector_graphics_png_favpng_1fbdUWQVUmj03uyMzadXbfFG8;
+                slideButton.Image = img;
+                slideButton.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.btnInsertOneClick_Click);
+
+                var insertButton = Factory.CreateRibbonButton();
+                insertButton.Label = "Insert this item";
+                insertButton.Tag = file;
+                insertButton.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.btnInsertOneClick_Click);
+                slideButton.Items.Add(insertButton);
+
+                var removeButton = Factory.CreateRibbonButton();
+                removeButton.Label = "Remove from favourites";
+                removeButton.Tag = file;
+                removeButton.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.btnRemoveOneClick_Click);
+                slideButton.Items.Add(removeButton);
             }
+            
         }
 
         /// <summary> 
@@ -64,13 +71,17 @@ namespace PowerWorshipVSTO
             this.group1 = this.Factory.CreateRibbonGroup();
             this.btnInsertScripture = this.Factory.CreateRibbonButton();
             this.btnInsertSong = this.Factory.CreateRibbonButton();
+            this.favouritesGroup = this.Factory.CreateRibbonGroup();
+            this.btnAddFavourite = this.Factory.CreateRibbonButton();
             this.tab1.SuspendLayout();
             this.group1.SuspendLayout();
+            this.favouritesGroup.SuspendLayout();
             this.SuspendLayout();
             // 
             // tab1
             // 
             this.tab1.Groups.Add(this.group1);
+            this.tab1.Groups.Add(this.favouritesGroup);
             this.tab1.Label = "PowerWorship";
             this.tab1.Name = "tab1";
             // 
@@ -99,6 +110,21 @@ namespace PowerWorshipVSTO
             this.btnInsertSong.ShowImage = true;
             this.btnInsertSong.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.btnInsertSong_Click);
             // 
+            // favouritesGroup
+            // 
+            this.favouritesGroup.Items.Add(this.btnAddFavourite);
+            this.favouritesGroup.Label = "Favourites";
+            this.favouritesGroup.Name = "favouritesGroup";
+            // 
+            // btnAddFavourite
+            // 
+            this.btnAddFavourite.ControlSize = Microsoft.Office.Core.RibbonControlSize.RibbonControlSizeLarge;
+            this.btnAddFavourite.Image = global::PowerWorshipVSTO.Properties.Resources.icon_plus;
+            this.btnAddFavourite.Label = "Add Favourite";
+            this.btnAddFavourite.Name = "btnAddFavourite";
+            this.btnAddFavourite.ShowImage = true;
+            this.btnAddFavourite.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.btnAddFavourite_Click);
+            // 
             // TestRibbonItem
             // 
             this.Name = "TestRibbonItem";
@@ -109,6 +135,8 @@ namespace PowerWorshipVSTO
             this.tab1.PerformLayout();
             this.group1.ResumeLayout(false);
             this.group1.PerformLayout();
+            this.favouritesGroup.ResumeLayout(false);
+            this.favouritesGroup.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -119,6 +147,8 @@ namespace PowerWorshipVSTO
         internal Microsoft.Office.Tools.Ribbon.RibbonGroup group1;
         internal Microsoft.Office.Tools.Ribbon.RibbonButton btnInsertScripture;
         internal Microsoft.Office.Tools.Ribbon.RibbonButton btnInsertSong;
+        internal Microsoft.Office.Tools.Ribbon.RibbonGroup favouritesGroup;
+        internal Microsoft.Office.Tools.Ribbon.RibbonButton btnAddFavourite;
     }
 
     partial class ThisRibbonCollection
