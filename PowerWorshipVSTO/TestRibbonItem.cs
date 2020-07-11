@@ -2,6 +2,8 @@
 using static Microsoft.Office.Core.MsoTriState;
 using Microsoft.Office.Tools.Ribbon;
 using Microsoft.Office.Interop.PowerPoint;
+using Microsoft.Win32;
+using System.IO;
 
 namespace PowerWorshipVSTO
 {
@@ -16,11 +18,17 @@ namespace PowerWorshipVSTO
         {
             Application app = Globals.ThisAddIn.Application;
 
+            var registryKey = Registry.CurrentUser.CreateSubKey(@"SOFTWARE\PowerWorship");
+            var lastSongLocation = registryKey.GetValue("LastSongLocation") as string;
+            
             FileDialog dialog = app.FileDialog[MsoFileDialogType.msoFileDialogOpen];
             dialog.Title = "Select Song or Presentation";
+            if (lastSongLocation != null) dialog.InitialFileName = lastSongLocation;
             if (dialog.Show() == -1) // If user selected a file
             {
-                foreach(string item in dialog.SelectedItems)
+                var selectedDirectory = Path.GetDirectoryName(dialog.SelectedItems.Item(1));
+                registryKey.SetValue("LastSongLocation", selectedDirectory);
+                foreach (string item in dialog.SelectedItems)
                 {
                     var sourcePresentation = app.Presentations.Open(item, msoTrue, msoFalse, msoFalse);
                     sourcePresentation.Slides.Range().Copy();
