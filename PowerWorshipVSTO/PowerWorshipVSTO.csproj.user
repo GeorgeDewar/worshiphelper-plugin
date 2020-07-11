@@ -4,5 +4,6 @@
     <PublishUrlHistory>publish\</PublishUrlHistory>
     <InstallUrlHistory>https://dewar.co.nz/PowerWorship/|http://dewar.co.nz/</InstallUrlHistory>
     <SupportUrlHistory />
+    <ProjectView>ShowAllFiles</ProjectView>
   </PropertyGroup>
 </Project>
