@@ -1,5 +1,7 @@
 ﻿using Microsoft.Office.Core;
+using Microsoft.Office.Tools.Ribbon;
 using Microsoft.Win32;
+using System.Collections.Generic;
 using System.IO;
 
 namespace PowerWorshipVSTO
@@ -11,37 +13,39 @@ namespace PowerWorshipVSTO
         /// </summary>
         private System.ComponentModel.IContainer components = null;
 
+        private List<RibbonSplitButton> favouriteButtons = new List<RibbonSplitButton>();
+
         public TestRibbonItem()
             : base(Globals.Factory.GetRibbonFactory())
         {
             InitializeComponent();
             ThisAddIn.PreInitialize();
 
-            var favRegistryKey = Registry.CurrentUser.CreateSubKey(@"SOFTWARE\PowerWorship\Favourites");
-            foreach (string file in favRegistryKey.GetValueNames())
+            // Add a set of predefined buttons for favourites. We add and remove favourites at runtime but we cannot add and remove
+            // items from the Ribbon. We can, however, change their attributes and show and hide them...
+            for (int i=0; i<5; i++)
             {
                 var slideButton = Factory.CreateRibbonSplitButton();
                 favouritesGroup.Items.Add(slideButton);
 
                 slideButton.ControlSize = RibbonControlSize.RibbonControlSizeLarge;
-                var pathParts = file.Split(new char[] { '\\' });
-                slideButton.Label = pathParts[pathParts.Length - 1].Replace(".pptx", "").Replace(".ppt", "");
-                slideButton.Tag = file;
+                slideButton.Visible = false;
+
                 var img = Properties.Resources.microsoft_powerpoint_computer_icons_clip_art_presentation_slide_vector_graphics_png_favpng_1fbdUWQVUmj03uyMzadXbfFG8;
                 slideButton.Image = img;
                 slideButton.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.btnInsertOneClick_Click);
 
                 var insertButton = Factory.CreateRibbonButton();
                 insertButton.Label = "Insert this item";
-                insertButton.Tag = file;
                 insertButton.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.btnInsertOneClick_Click);
                 slideButton.Items.Add(insertButton);
 
                 var removeButton = Factory.CreateRibbonButton();
                 removeButton.Label = "Remove from favourites";
-                removeButton.Tag = file;
                 removeButton.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.btnRemoveOneClick_Click);
                 slideButton.Items.Add(removeButton);
+
+                favouriteButtons.Add(slideButton);
             }
             
         }

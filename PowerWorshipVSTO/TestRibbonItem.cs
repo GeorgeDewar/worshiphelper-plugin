@@ -11,7 +11,26 @@ namespace PowerWorshipVSTO
     {
         private void TestRibbonItem_Load(object sender, RibbonUIEventArgs e)
         {
-            
+            var favRegistryKey = Registry.CurrentUser.CreateSubKey(@"SOFTWARE\PowerWorship\Favourites");
+            var favouriteCount = favRegistryKey.GetValueNames().Length;
+            for (int i=0; i < favouriteCount; i++)
+            {
+                var file = favRegistryKey.GetValueNames()[i];
+                var slideButton = favouriteButtons[i];
+                
+                var pathParts = file.Split(new char[] { '\\' });
+                slideButton.Label = pathParts[pathParts.Length - 1].Replace(".pptx", "").Replace(".ppt", "");
+                slideButton.Tag = file;
+                slideButton.Visible = true;
+            }
+
+            // Hide the unused buttons
+            for (int i = favouriteCount; i < favouriteButtons.Count; i++)
+            {
+                var slideButton = favouriteButtons[i];
+                slideButton.Visible = false;
+            }
+            btnAddFavourite.Enabled = favouriteCount < favouriteButtons.Count;
         }
 
         private void btnInsertSong_Click(object sender, RibbonControlEventArgs e)
@@ -49,7 +68,17 @@ namespace PowerWorshipVSTO
         {
             Application app = Globals.ThisAddIn.Application;
 
-            var fileName = (sender as RibbonControl).Tag as string;
+            string fileName;
+            if(sender is RibbonSplitButton)
+            {
+                // This IS the parent SplitButton
+                fileName = (sender as RibbonControl).Tag as string;
+            } else
+            {
+                // Get it from the tag of the parent SplitButton
+                fileName = (sender as RibbonControl).Parent.Tag as string;
+            }
+
             var sourcePresentation = app.Presentations.Open(fileName, msoTrue, msoFalse, msoFalse);
             sourcePresentation.Slides.Range().Copy();
             sourcePresentation.Close();
@@ -60,7 +89,7 @@ namespace PowerWorshipVSTO
         private void btnRemoveOneClick_Click(object sender, RibbonControlEventArgs e)
         {
             var favRegistryKey = Registry.CurrentUser.CreateSubKey(@"SOFTWARE\PowerWorship\Favourites");
-            var fileName = (sender as RibbonControl).Tag as string;
+            var fileName = (sender as RibbonControl).Parent.Tag as string;
             try
             {
                 favRegistryKey.DeleteValue(fileName);
@@ -68,7 +97,9 @@ namespace PowerWorshipVSTO
             {
                 System.Windows.Forms.MessageBox.Show("This item appears to have already been deleted - try restarting PowerPoint.");
             }
-            ((sender as RibbonControl).Parent as RibbonControl).Visible = false;
+
+            // Force a refresh
+            TestRibbonItem_Load(null, null);
         }
 
         private void btnAddFavourite_Click(object sender, RibbonControlEventArgs e)
@@ -77,6 +108,11 @@ namespace PowerWorshipVSTO
 
             var registryKey = Registry.CurrentUser.CreateSubKey(@"SOFTWARE\PowerWorship");
             var favRegistryKey = Registry.CurrentUser.CreateSubKey(@"SOFTWARE\PowerWorship\Favourites");
+
+            if (favRegistryKey.GetValueNames().Length >= 5) {
+                System.Windows.Forms.MessageBox.Show("No more favourites can be added");
+            }
+                        
             var lastSongLocation = registryKey.GetValue("LastSongLocation") as string;
 
             FileDialog dialog = app.FileDialog[MsoFileDialogType.msoFileDialogOpen];
@@ -88,12 +124,10 @@ namespace PowerWorshipVSTO
                 {
                     favRegistryKey.SetValue(item, item);
                 }
-                System.Windows.Forms.MessageBox.Show(
-                    "Your new favourite has been added, but it won't appear until you restart PowerPoint.",
-                    "Favourite added");
             }
 
-            
+            // Force a refresh
+            TestRibbonItem_Load(null, null);
         }
     }
 }
