@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
-	<Product Id="{DCB7F1E3-CA24-42D7-AF08-5F67BAC138A8}" Name="PowerWorship" Language="1033" Version="0.1.0.0" Manufacturer="PowerWorship" UpgradeCode="cd4af055-5197-40b2-b7e7-ad60de11b453">
+	<Product Id="*" Name="PowerWorship" Language="1033" Version="!(bind.fileVersion.PowerWorshipVSTO_dll)" Manufacturer="PowerWorship" UpgradeCode="cd4af055-5197-40b2-b7e7-ad60de11b453">
 		<Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" />
 
-		<MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed." />
+		<MajorUpgrade AllowSameVersionUpgrades="yes" DowngradeErrorMessage="A newer version of [ProductName] is already installed." />
 		<MediaTemplate EmbedCab="yes" />
 
 		<UIRef Id="WixUI_Minimal" />
