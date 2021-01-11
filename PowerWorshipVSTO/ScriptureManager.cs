@@ -97,13 +97,12 @@ namespace PowerWorshipVSTO
 
             var insertAt = app.ActivePresentation.Slides.Count;
 
-            
             Debug.WriteLine($"Slide count = {app.ActivePresentation.Slides.Count}");
             if (window.Selection.SlideRange != null)
             {
                 insertAt = window.Selection.SlideRange.SlideIndex + 1;
             }
-            if (app.ActivePresentation.SlideShowWindow != null)
+            if (app.SlideShowWindows.Count > 0)
             {
                 insertAt = app.ActivePresentation.SlideShowWindow.View.Slide.SlideIndex + 1;
             }
