@@ -1,0 +1,6 @@
+- Insert song as first item, then scripture, then song					PASS (if multi selection bug worked around)
+- Insert scripture as first item, then song, then scripture				FAIL (if there is no initial slide, then no selection, so bug hit)
+- Insert scripture in between existing slides
+  - with selection: slide												PASS
+  - with selection: nothing (carat position only)						FAIL (Nothing appropriate is currently selected.)
+  - with selection: multi												FAIL (Illegal property fetch from a range with mixed values.)
