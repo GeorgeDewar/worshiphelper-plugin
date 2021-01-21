@@ -77,15 +77,19 @@ namespace PowerWorshipVSTO
             this.btnInsertSong = this.Factory.CreateRibbonButton();
             this.favouritesGroup = this.Factory.CreateRibbonGroup();
             this.btnAddFavourite = this.Factory.CreateRibbonButton();
+            this.grpDebug = this.Factory.CreateRibbonGroup();
+            this.btnSelfTest = this.Factory.CreateRibbonButton();
             this.tab1.SuspendLayout();
             this.group1.SuspendLayout();
             this.favouritesGroup.SuspendLayout();
+            this.grpDebug.SuspendLayout();
             this.SuspendLayout();
             // 
             // tab1
             // 
             this.tab1.Groups.Add(this.group1);
             this.tab1.Groups.Add(this.favouritesGroup);
+            this.tab1.Groups.Add(this.grpDebug);
             this.tab1.Label = "PowerWorship";
             this.tab1.Name = "tab1";
             // 
@@ -129,6 +133,18 @@ namespace PowerWorshipVSTO
             this.btnAddFavourite.ShowImage = true;
             this.btnAddFavourite.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.btnAddFavourite_Click);
             // 
+            // grpDebug
+            // 
+            this.grpDebug.Items.Add(this.btnSelfTest);
+            this.grpDebug.Label = "Debug";
+            this.grpDebug.Name = "grpDebug";
+            // 
+            // btnSelfTest
+            // 
+            this.btnSelfTest.Label = "Self-Test";
+            this.btnSelfTest.Name = "btnSelfTest";
+            this.btnSelfTest.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.btnSelfTest_Click);
+            // 
             // TestRibbonItem
             // 
             this.Name = "TestRibbonItem";
@@ -141,6 +157,8 @@ namespace PowerWorshipVSTO
             this.group1.PerformLayout();
             this.favouritesGroup.ResumeLayout(false);
             this.favouritesGroup.PerformLayout();
+            this.grpDebug.ResumeLayout(false);
+            this.grpDebug.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -153,6 +171,8 @@ namespace PowerWorshipVSTO
         internal Microsoft.Office.Tools.Ribbon.RibbonButton btnInsertSong;
         internal Microsoft.Office.Tools.Ribbon.RibbonGroup favouritesGroup;
         internal Microsoft.Office.Tools.Ribbon.RibbonButton btnAddFavourite;
+        internal RibbonGroup grpDebug;
+        internal RibbonButton btnSelfTest;
     }
 
     partial class ThisRibbonCollection

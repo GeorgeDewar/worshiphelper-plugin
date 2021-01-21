@@ -4,3 +4,6 @@
   - with selection: slide												PASS
   - with selection: nothing (carat position only)						FAIL (Nothing appropriate is currently selected.)
   - with selection: multi												FAIL (Illegal property fetch from a range with mixed values.)
+- Edit with multiple presentations open
+- With presenter view open, or not
+- I key does nothing when presenter view not in focus

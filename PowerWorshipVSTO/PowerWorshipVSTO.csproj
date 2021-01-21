@@ -176,6 +176,7 @@
     can be found.
   -->
   <ItemGroup>
+    <Compile Include="SelfTestManager.cs" />
     <Compile Include="ScriptureReference.cs" />
     <Compile Include="ScriptureManager.cs" />
     <Compile Include="InsertScriptureForm.cs">
@@ -223,6 +224,7 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
+    <Compile Include="SongManager.cs" />
     <Compile Include="TestRibbonItem.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -251,6 +253,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\icon-plus.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="data\TestFiles\" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
