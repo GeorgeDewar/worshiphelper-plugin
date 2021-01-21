@@ -1,6 +1,7 @@
 ﻿using Microsoft.Office.Interop.PowerPoint;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -17,9 +18,28 @@ namespace PowerWorshipVSTO
         public void SelfTest()
         {
             // Insert song as first item, then scripture, then song
-            ClearPresentation();
-            InsertSlide();
-            songManager.InsertSongFromFile(TestFilePath("TestSong1.pptx"));
+            //ClearPresentation();
+            //InsertSlide();
+            //songManager.InsertSongFromFile(TestFilePath("TestSong1.pptx"));
+
+            //var sel = app.ActiveWindow.Selection;
+            var activeWindow = app.ActiveWindow;
+
+            // If zero slides, insertIndex = 1
+            // If selection range exists, use last selected
+            // If not, do this trick to set the selection
+            activeWindow.ViewType = PpViewType.ppViewSlide;
+            activeWindow.ViewType = PpViewType.ppViewNormal;
+            
+            
+            
+            Debug.WriteLine(activeWindow.Panes.Count);
+            Debug.WriteLine(activeWindow.ActivePane.ToString());
+
+            //activeWindow.Panes;
+
+            //Slide sel = app.ActiveWindow.View.Slide;
+            //Debug.WriteLine(sel.SlideIndex);
         }
 
         private void ClearPresentation()
