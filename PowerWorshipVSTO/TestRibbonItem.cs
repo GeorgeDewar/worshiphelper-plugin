@@ -62,11 +62,7 @@ namespace PowerWorshipVSTO
                 fileName = (sender as RibbonControl).Parent.Tag as string;
             }
 
-            var sourcePresentation = app.Presentations.Open(fileName, msoTrue, msoFalse, msoFalse);
-            sourcePresentation.Slides.Range().Copy();
-            sourcePresentation.Close();
-            app.CommandBars.ExecuteMso("PasteSourceFormatting");
-            ScriptureManager.goToEnd();
+            new SongManager().InsertSongFromFile(fileName);
         }
 
         private void btnRemoveOneClick_Click(object sender, RibbonControlEventArgs e)
