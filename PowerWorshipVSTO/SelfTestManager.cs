@@ -20,10 +20,16 @@ namespace PowerWorshipVSTO
 
         async public void SelfTest()
         {
+            await TestSequentialInsertWithSongFirst();
+            await TestSequentialInsertWithScriptureFirst();
+            await TestInsertScriptureInMiddle();
+        }
+
+        private async Task TestSequentialInsertWithSongFirst()
+        {
             // Insert song as first item, then scripture, then song
             ClearPresentation();
             InsertSlide();
-            var activeWindow = app.ActiveWindow;
             songManager.InsertSongFromFile(TestFilePath("TestSong1.pptx"));
             await Task.Delay(DELAY);
             scriptureManager.addScripture(bible, "Genesis", 1, 1, 2);
@@ -39,16 +45,46 @@ namespace PowerWorshipVSTO
             assertSongContent(index++, "Song 2 Slide 1");
             assertSongContent(index++, "Song 2 Slide 2");
             assertSongContent(index++, "Song 2 Slide 3");
-            //var sel = app.ActiveWindow.Selection;
+        }
 
+        private async Task TestSequentialInsertWithScriptureFirst()
+        {
+            ClearPresentation();
+            scriptureManager.addScripture(bible, "Genesis", 1, 1, 2);
+            await Task.Delay(DELAY);
+            songManager.InsertSongFromFile(TestFilePath("TestSong1.pptx"));
+            await Task.Delay(DELAY);
+            songManager.InsertSongFromFile(TestFilePath("TestSong2.pptx"));
 
-            // If zero slides, insertIndex = 1
-            // If selection range exists, use last selected
-            // If not, do this trick to set the selection
-            activeWindow.ViewType = PpViewType.ppViewSlide;
-            activeWindow.ViewType = PpViewType.ppViewNormal;
-            
+            var index = 1;
+            assertScriptureContent(index++, "In the beginning", "Genesis 1:1-2 (NASB)");
+            assertSongContent(index++, "Song 1 Slide 1");
+            assertSongContent(index++, "Song 1 Slide 2");
+            assertSongContent(index++, "Song 1 Slide 3");
+            assertSongContent(index++, "Song 2 Slide 1");
+            assertSongContent(index++, "Song 2 Slide 2");
+            assertSongContent(index++, "Song 2 Slide 3");
+        }
 
+        private async Task TestInsertScriptureInMiddle()
+        {
+            ClearPresentation();
+            songManager.InsertSongFromFile(TestFilePath("TestSong1.pptx"));
+            await Task.Delay(DELAY);
+            songManager.InsertSongFromFile(TestFilePath("TestSong2.pptx"));
+            await Task.Delay(DELAY);
+
+            new SelectionManager().GoToSlide(3);
+            scriptureManager.addScripture(bible, "Genesis", 1, 1, 2);
+
+            var index = 1;
+            assertSongContent(index++, "Song 1 Slide 1");
+            assertSongContent(index++, "Song 1 Slide 2");
+            assertSongContent(index++, "Song 1 Slide 3");
+            assertScriptureContent(index++, "In the beginning", "Genesis 1:1-2 (NASB)");
+            assertSongContent(index++, "Song 2 Slide 1");
+            assertSongContent(index++, "Song 2 Slide 2");
+            assertSongContent(index++, "Song 2 Slide 3");
         }
 
         private void assertSongContent(int slideIndex, string content)
