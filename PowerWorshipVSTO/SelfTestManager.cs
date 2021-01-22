@@ -23,6 +23,7 @@ namespace PowerWorshipVSTO
             await TestSequentialInsertWithSongFirst();
             await TestSequentialInsertWithScriptureFirst();
             await TestInsertScriptureInMiddle();
+            await TestInsertSongInMiddle();
         }
 
         private async Task TestSequentialInsertWithSongFirst()
@@ -85,6 +86,36 @@ namespace PowerWorshipVSTO
             assertSongContent(index++, "Song 2 Slide 1");
             assertSongContent(index++, "Song 2 Slide 2");
             assertSongContent(index++, "Song 2 Slide 3");
+        }
+
+        private async Task TestInsertSongInMiddle()
+        {
+            ClearPresentation();
+            songManager.InsertSongFromFile(TestFilePath("TestSong1.pptx"));
+            await Task.Delay(DELAY);
+            
+            scriptureManager.addScripture(bible, "Genesis", 1, 1, 2);
+            await Task.Delay(DELAY);
+
+            var index = 1;
+            assertSongContent(index++, "Song 1 Slide 1");
+            assertSongContent(index++, "Song 1 Slide 2");
+            assertSongContent(index++, "Song 1 Slide 3");
+            assertScriptureContent(index++, "In the beginning", "Genesis 1:1-2 (NASB)");
+
+            new SelectionManager().GoToSlide(3);
+            songManager.InsertSongFromFile(TestFilePath("TestSong2.pptx"));
+            
+            // Now the scripture should be at the end still, displaced by Song 2
+            index = 1;
+            assertSongContent(index++, "Song 1 Slide 1");
+            assertSongContent(index++, "Song 1 Slide 2");
+            assertSongContent(index++, "Song 1 Slide 3");
+            assertSongContent(index++, "Song 2 Slide 1");
+            assertSongContent(index++, "Song 2 Slide 2");
+            assertSongContent(index++, "Song 2 Slide 3");
+            assertScriptureContent(index++, "In the beginning", "Genesis 1:1-2 (NASB)");
+
         }
 
         private void assertSongContent(int slideIndex, string content)
