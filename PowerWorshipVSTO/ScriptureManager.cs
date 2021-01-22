@@ -11,6 +11,7 @@ namespace PowerWorshipVSTO
 
         public void addScripture(Bible bible, string bookName, int chapterNum, int verseNumStart, int verseNumEnd)
         {
+            Debug.WriteLine($"Inserting scripture from {bookName} {chapterNum}:{verseNumStart}-{verseNumEnd} ({bible.name})");
             var verseCount = verseNumEnd - verseNumStart + 1;
 
             Application app = Globals.ThisAddIn.Application;
@@ -95,17 +96,7 @@ namespace PowerWorshipVSTO
             Application app = Globals.ThisAddIn.Application;
             var window = getMainWindow();
 
-            var insertAt = app.ActivePresentation.Slides.Count;
-
-            Debug.WriteLine($"Slide count = {app.ActivePresentation.Slides.Count}");
-            if (window.Selection.SlideRange != null)
-            {
-                insertAt = window.Selection.SlideRange.SlideIndex + 1;
-            }
-            if (app.SlideShowWindows.Count > 0)
-            {
-                insertAt = app.ActivePresentation.SlideShowWindow.View.Slide.SlideIndex + 1;
-            }
+            var insertAt = new SelectionManager().GetNextSlideIndex();
             Debug.WriteLine($"Pasting at slide {insertAt}");
             //window.View.GotoSlide(insertAt);
             templatePresentation.Slides[1].Copy();

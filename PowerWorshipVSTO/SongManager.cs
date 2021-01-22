@@ -1,6 +1,8 @@
 ﻿using Microsoft.Office.Core;
 using Microsoft.Office.Interop.PowerPoint;
 using Microsoft.Win32;
+using System;
+using System.Diagnostics;
 using System.IO;
 using static Microsoft.Office.Core.MsoTriState;
 
@@ -32,11 +34,32 @@ namespace PowerWorshipVSTO
 
         public void InsertSongFromFile(string filePath)
         {
-            var sourcePresentation = app.Presentations.Open(filePath, msoTrue, msoFalse, msoFalse);
-            sourcePresentation.Slides.Range().Copy();
-            sourcePresentation.Close();
-            app.CommandBars.ExecuteMso("PasteSourceFormatting");
-            ScriptureManager.goToEnd();
+            Debug.WriteLine($"Inserting presentation from file at {filePath}");
+
+            try
+            {
+                var selectionManager = new SelectionManager();
+                var insertIndex = selectionManager.GetNextSlideIndex();
+                if (insertIndex > 1)
+                {
+                // Paste will already paste in the slide *after* the selected one
+                    selectionManager.GoToSlide(insertIndex - 1);
+                } else
+                {
+                // There must be no slides, no need to navigate
+                }
+
+                var sourcePresentation = app.Presentations.Open(filePath, msoTrue, msoFalse, msoFalse);
+                sourcePresentation.Slides.Range().Copy();
+                sourcePresentation.Close();
+
+                app.CommandBars.ExecuteMso("PasteSourceFormatting");
+                //ScriptureManager.goToEnd();
+            } catch (Exception e)
+            {
+                Debug.WriteLine(e.Message);
+                System.Windows.Forms.MessageBox.Show($"An error occurred while inserting the song or presentation.\n\n{e.Message}");
+            }
         }
     }
 }

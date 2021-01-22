@@ -176,6 +176,7 @@
     can be found.
   -->
   <ItemGroup>
+    <Compile Include="SelectionManager.cs" />
     <Compile Include="SelfTestManager.cs" />
     <Compile Include="ScriptureReference.cs" />
     <Compile Include="ScriptureManager.cs" />

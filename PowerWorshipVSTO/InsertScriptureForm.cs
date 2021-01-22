@@ -41,7 +41,7 @@ namespace PowerWorshipVSTO
             }
 
             // Initialise so that we can populate the books
-            setBible(cmbTranslation.SelectedItem as string);
+            bible = OpenSongBibleReader.LoadTranslation(cmbTranslation.SelectedItem as string);
 
             var source = new AutoCompleteStringCollection();
             source.AddRange(bible.books.Select(book => book.name).ToArray());
@@ -126,16 +126,10 @@ namespace PowerWorshipVSTO
             var box = (sender as ComboBox);
             var translationName = box.SelectedItem as string;
 
-            setBible(translationName);
+            bible = OpenSongBibleReader.LoadTranslation(translationName);
 
             var registryKey = Registry.CurrentUser.CreateSubKey(@"SOFTWARE\PowerWorship");
             registryKey.SetValue("LastBibleTranslation", translationName);
-        }
-
-        private void setBible(string translationName)
-        {
-            bible = new OpenSongBibleReader().load($@"{ThisAddIn.appDataPath}\Bibles\{translationName}.xmm");
-            bible.name = translationName;
         }
     }
 }

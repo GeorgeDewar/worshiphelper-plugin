@@ -28,6 +28,13 @@ namespace PowerWorshipVSTO
 
     class OpenSongBibleReader
     {
+        public static Bible LoadTranslation(String translationName)
+        {
+            var bible = new OpenSongBibleReader().load($@"{ThisAddIn.appDataPath}\Bibles\{translationName}.xmm");
+            bible.name = translationName;
+            return bible;
+        }
+
         public Bible load(String fileName)
         {
             var xml = XDocument.Load(fileName);
