@@ -37,6 +37,7 @@ namespace PowerWorshipVSTO
             var numSlidesAdded = 0;
             for (int i = 0; i < verseCount; i++)
             {
+                Debug.WriteLine($"Adding verse {verseList[i].number}");
                 var originalText = objBodyTextBox.TextFrame.TextRange.Text;
                 var verseText = "$" + verseList[i].number + "$ " + verseList[i].text + " ";
                 objBodyTextBox.TextFrame.TextRange.Text = objBodyTextBox.TextFrame.TextRange.Text + verseText;
@@ -51,12 +52,13 @@ namespace PowerWorshipVSTO
                         }
                     } else
                     {
+                        Debug.WriteLine($"Adding new slide");
+
                         // We have overshot the space available on our slide, so *undo* the extra text insertion
                         objBodyTextBox.TextFrame.TextRange.Text = originalText;
 
                         // ... and move to a new slide
                         currentSlide = currentSlide.Duplicate()[1];
-                        currentSlide.MoveTo(app.ActivePresentation.Slides.Count);
                         numSlidesAdded++;
                         objBodyTextBox = currentSlide.Shapes[2];
                         objDescTextBox = currentSlide.Shapes[3];
@@ -87,8 +89,6 @@ namespace PowerWorshipVSTO
                     }
                 }
             }
-
-            goToEnd();
         }
 
         private Slide newSlideFromTemplate(Presentation templatePresentation)
@@ -102,14 +102,6 @@ namespace PowerWorshipVSTO
             templatePresentation.Slides[1].Copy();
             return app.ActivePresentation.Slides.Paste(insertAt)[1];
 
-        }
-
-        // TODO: Move to common location
-        public static void goToEnd()
-        {
-            Application app = Globals.ThisAddIn.Application;
-            var window = getMainWindow();
-            window.View.GotoSlide(app.ActivePresentation.Slides.Count);
         }
 
         public static DocumentWindow getMainWindow()

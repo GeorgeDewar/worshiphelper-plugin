@@ -176,6 +176,12 @@
     can be found.
   -->
   <ItemGroup>
+    <Compile Include="AddContentLiveForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="AddContentLiveForm.Designer.cs">
+      <DependentUpon>AddContentLiveForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="SelectionManager.cs" />
     <Compile Include="SelfTestManager.cs" />
     <Compile Include="ScriptureReference.cs" />
@@ -190,6 +196,9 @@
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
+    <EmbeddedResource Include="AddContentLiveForm.resx">
+      <DependentUpon>AddContentLiveForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="InsertScriptureForm.resx">
       <DependentUpon>InsertScriptureForm.cs</DependentUpon>
     </EmbeddedResource>

@@ -1,10 +1,10 @@
-﻿using Microsoft.Office.Tools;
+﻿using Microsoft.Office.Interop.PowerPoint;
+using Microsoft.Office.Tools;
 using System;
 using System.Diagnostics;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Threading;
-using System.Windows.Forms;
 
 namespace PowerWorshipVSTO
 {
@@ -48,26 +48,37 @@ namespace PowerWorshipVSTO
 
         private IntPtr KeyboardHookCallback(int nCode, IntPtr wParam, IntPtr lParam)
         {
+            Application app = Globals.ThisAddIn.Application;
+
             if (nCode >= 0)
             {
-                // handle key message here
-                //Debug.WriteLine("Key event detected.");
-                //Debug.WriteLine($"Key detected: nCode = {nCode}, wParam = {wParam}, lParam = {lParam.ToInt32()}");
-
                 // Various attempts to decode this value as a proper struct were unsuccessful, with memory violation errors...
                 bool keyUp = (lParam.ToInt32() & 0xC0000000) != 0 && nCode == 0;
 
-                if (keyUp)
+                bool presenting = false;
+                if (app.Presentations.Count > 0) // if there is a presentation, there is an active presentation
+                {
+                    foreach (DocumentWindow win in app.ActivePresentation.Windows)
+                    {
+                        // There is probably a better way...
+                        if (win.Caption.Contains("Presenter View") && win.Active == Microsoft.Office.Core.MsoTriState.msoTrue)
+                        {
+                            presenting = true;
+                        }
+                    }
+                }
+
+                if (keyUp && presenting)
                 {
                     char keyPressed = (char)wParam.ToInt32();
-                    if (keyPressed == 'I')
+                    if (keyPressed == 'A')
                     {
                         // Insert song or scripture
-                        new InsertScriptureForm().Show();
+                        new AddContentLiveForm().Show();
                     } else if (keyPressed == 'L')
                     {
                         // Go to logo
-                        MessageBox.Show($"Key detected: Go to Logo");
+                        System.Windows.Forms.MessageBox.Show($"Key detected: Go to Logo");
                     }
                     
                 }
