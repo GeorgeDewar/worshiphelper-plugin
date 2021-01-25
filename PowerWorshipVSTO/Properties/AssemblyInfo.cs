@@ -6,11 +6,11 @@ using System.Security;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("PowerWorship")]
+[assembly: AssemblyTitle("WorshipHelper")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("PowerWorship")]
+[assembly: AssemblyProduct("WorshipHelper")]
 [assembly: AssemblyCopyright("Copyright © George Dewar 2020")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
