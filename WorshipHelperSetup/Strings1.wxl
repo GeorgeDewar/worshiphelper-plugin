@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<WixLocalization Culture="en-us" xmlns="http://schemas.microsoft.com/wix/2006/localization">
+  <String Id="WelcomeDlg_Title">[ProductName] Setup - [ProductVersion]</String>
+  <String Id="SetupTypeDlg_Title">[ProductName] Setup - [ProductVersion]</String>
+  <String Id="WelcomeEulaDlg_Title">[ProductName] Setup - [ProductVersion]</String>
+  <String Id="BrowseDlg_Title">[ProductName] Setup - [ProductVersion]</String>
+  <String Id="CancelDlg_Title">[ProductName] Setup - [ProductVersion]</String>
+  <String Id="CustomizeDlg_Title">[ProductName] Setup - [ProductVersion]</String>
+  <String Id="LicenseAgreementDlg_Title">[ProductName] Setup - [ProductVersion]</String>
+  <String Id="VerifyReadyDlg_Title">[ProductName] Setup - [ProductVersion]</String>
+  <String Id="WaitForCostingDlg_Title">[ProductName] Setup - [ProductVersion]</String>
+</WixLocalization>

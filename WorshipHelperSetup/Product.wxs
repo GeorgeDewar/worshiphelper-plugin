@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+	<Product Id="*" Name="PowerWorship" Language="1033" Version="!(bind.fileVersion.PowerWorshipVSTO_dll)" Manufacturer="PowerWorship" UpgradeCode="cd4af055-5197-40b2-b7e7-ad60de11b453">
+		<Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" />
+
+		<MajorUpgrade AllowSameVersionUpgrades="yes" DowngradeErrorMessage="A newer version of [ProductName] is already installed." />
+		<MediaTemplate EmbedCab="yes" />
+
+		<UIRef Id="WixUI_Minimal" />
+		<WixVariable Id="WixUILicenseRtf" Value="license.rtf" />
+
+		<Feature Id="ProductFeature" Title="PowerWorship" Level="1">
+			<ComponentGroupRef Id="ProductComponents" />
+			<ComponentRef Id="Registry_FriendlyName" />
+			<ComponentRef Id="Registry_Description" />
+			<ComponentRef Id="Registry_Manifest" />
+			<ComponentRef Id="Registry_LoadBehavior" />
+			<ComponentRef Id="RegistryEntries" />
+			<ComponentRef Id="ScriptureTemplate_Component" />
+			<ComponentRef Id="Bible_NASB_Component" />
+			<ComponentRef Id="Bible_ESV_Component" />
+		</Feature>
+
+		<Property Id="VSTORUNTIMEREDIST">
+			<RegistrySearch
+			  Id="VSTORuntimeRedist"
+			  Root="HKLM"
+			  Key="SOFTWARE\Microsoft\VSTO Runtime Setup\v4R"
+			  Name="Version"
+			  Type="raw" />
+		</Property>
+		<Condition
+		  Message="The Visual Studio 2010 Tools for Office Runtime is not installed. 
+  Please download and install from 
+  http://www.microsoft.com/en-us/download/details.aspx?id=20479.">
+			<![CDATA[Installed OR VSTORUNTIMEREDIST>="10.0.30319"]]>
+		</Condition>
+
+		<!--<PropertyRef Id="NETFRAMEWORK40FULL"/>
+    <Condition Message="This application requires .NET Framework 4.0.">
+      <![CDATA[Installed OR NETFRAMEWORK40FULL]]>
+    </Condition>-->
+	</Product>
+
+	<Fragment>
+		<Directory Id="TARGETDIR" Name="SourceDir">
+			<Directory Id="ProgramFilesFolder">
+				<Directory Id="INSTALLFOLDER" Name="PowerWorship">
+					<Directory Id="DATA_DIR" Name="Data">
+						<Directory Id="TEMPLATES_DIR" Name="Templates" />
+						<Directory Id="BIBLES_DIR" Name="Bibles" />
+					</Directory>
+				</Directory>
+				<Component Id="Registry_FriendlyName">
+					<RegistryValue Id="RegKey_FriendlyName" Root="HKCU"
+								   Key="Software\Microsoft\Office\PowerPoint\Addins\PowerWorship"
+								   Name="FriendlyName"
+								   Value="PowerWorship"
+								   Type="string" KeyPath="yes" />
+				</Component>
+				<Component Id="Registry_Description">
+					<RegistryValue Id="RegKey_Description" Root="HKCU"
+								   Key="Software\Microsoft\Office\PowerPoint\Addins\PowerWorship"
+								   Name="Description"
+								   Value="Easily build service presentations for your church"
+								   Type="string" KeyPath="yes" />
+				</Component>
+				<Component Id="Registry_Manifest">
+					<RegistryValue Id="RegKey_Manifest" Root="HKCU"
+								   Key="Software\Microsoft\Office\PowerPoint\Addins\PowerWorship"
+								   Name="Manifest" Value="[INSTALLFOLDER]PowerWorshipVSTO.vsto|vstolocal"
+								   Type="string" KeyPath="yes" />
+				</Component>
+				<Component Id="Registry_LoadBehavior">
+					<RegistryValue Id="RegKey_LoadBehavior" Root="HKCU"
+								   Key="Software\Microsoft\Office\PowerPoint\Addins\PowerWorship"
+								   Name="LoadBehavior" Value="3"
+								   Type="integer" KeyPath="yes" />
+				</Component>
+				<Component Id="RegistryEntries" Guid="{163A6B7C-CB58-4C6B-B4D3-FD4ACAA40295}">
+					<RegistryKey Root="HKCU"
+								 Key="Software\PowerWorship"
+								 Action="createAndRemoveOnUninstall">
+						<RegistryValue Type="string" Name="InstallLocation" Value="[INSTALLFOLDER]" />
+					</RegistryKey>
+				</Component>
+			</Directory>
+		</Directory>
+	</Fragment>
+
+	<Fragment>
+		<ComponentGroup Id="ProductComponents" Directory="INSTALLFOLDER">
+			<Component Id="PowerWorship_vsto_Component">
+				<File Id="PowerWorship_vsto" KeyPath="yes"
+					  Name="PowerWorshipVSTO.vsto" Source="$(var.PowerWorshipVSTO.TargetDir)"></File>
+			</Component>
+			<Component Id="PowerWorship_dll_Component" >
+				<File Id="PowerWorshipVSTO_dll" KeyPath="yes"
+					  Name="PowerWorshipVSTO.dll" Source="$(var.PowerWorshipVSTO.TargetDir)" />
+			</Component>
+			<Component Id="PowerWorship_dll_manifest_Component">
+				<File Id="PowerWorshipVSTO_dll_manifest" KeyPath="yes"
+					  Name="PowerWorshipVSTO.dll.manifest" Source="$(var.PowerWorshipVSTO.TargetDir)"></File>
+			</Component>
+			<Component Id="MSOfficeToolsCommon_dll_Component">
+				<File Id="MSOfficeToolsCommon_dll" KeyPath="yes"
+					  Name="Microsoft.Office.Tools.Common.v4.0.Utilities.dll"
+					  Source="$(var.PowerWorshipVSTO.TargetDir)"></File>
+			</Component>
+		</ComponentGroup>
+
+		<DirectoryRef Id="TEMPLATES_DIR">
+			<Component Id="ScriptureTemplate_Component">
+				<File Id="ScriptureTemplate_pptx" KeyPath="yes"
+					  Name="ScriptureTemplate.pptx"
+					  Source="$(var.PowerWorshipVSTO.TargetDir)data\Templates\ScriptureTemplate.pptx"></File>
+			</Component>
+		</DirectoryRef>
+
+		<DirectoryRef Id="BIBLES_DIR">
+			<Component Id="Bible_NASB_Component">
+				<File Id="NASB_xmm" KeyPath="yes"
+					  Name="NASB.xmm"
+					  Source="$(var.PowerWorshipVSTO.TargetDir)data\Bibles\NASB.xmm"></File>
+			</Component>
+			<Component Id="Bible_ESV_Component">
+				<File Id="ESV_xmm" KeyPath="yes"
+					  Name="ESV.xmm"
+					  Source="$(var.PowerWorshipVSTO.TargetDir)data\Bibles\ESV.xmm"></File>
+			</Component>
+		</DirectoryRef>
+
+	</Fragment>
+</Wix>
