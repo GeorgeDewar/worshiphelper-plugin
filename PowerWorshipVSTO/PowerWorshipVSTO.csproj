@@ -176,6 +176,14 @@
     can be found.
   -->
   <ItemGroup>
+    <Compile Include="AddContentLiveForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="AddContentLiveForm.Designer.cs">
+      <DependentUpon>AddContentLiveForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="SelectionManager.cs" />
+    <Compile Include="SelfTestManager.cs" />
     <Compile Include="ScriptureReference.cs" />
     <Compile Include="ScriptureManager.cs" />
     <Compile Include="InsertScriptureForm.cs">
@@ -188,6 +196,9 @@
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
+    <EmbeddedResource Include="AddContentLiveForm.resx">
+      <DependentUpon>AddContentLiveForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="InsertScriptureForm.resx">
       <DependentUpon>InsertScriptureForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -223,6 +234,7 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
+    <Compile Include="SongManager.cs" />
     <Compile Include="TestRibbonItem.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -251,6 +263,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\icon-plus.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="data\TestFiles\" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

@@ -1,4 +1,5 @@
 ﻿using Microsoft.Office.Interop.PowerPoint;
+using System.Diagnostics;
 using System.Linq;
 using static Microsoft.Office.Core.MsoTriState;
 
@@ -10,6 +11,7 @@ namespace PowerWorshipVSTO
 
         public void addScripture(Bible bible, string bookName, int chapterNum, int verseNumStart, int verseNumEnd)
         {
+            Debug.WriteLine($"Inserting scripture from {bookName} {chapterNum}:{verseNumStart}-{verseNumEnd} ({bible.name})");
             var verseCount = verseNumEnd - verseNumStart + 1;
 
             Application app = Globals.ThisAddIn.Application;
@@ -31,9 +33,11 @@ namespace PowerWorshipVSTO
             objBodyTextBox.TextFrame.TextRange.Text = "";
             objDescTextBox.TextFrame.TextRange.Text = reference;
 
-            var startSlideIndex = app.ActivePresentation.Slides.Count;
+            var startSlideIndex = currentSlide.SlideIndex;
+            var numSlidesAdded = 0;
             for (int i = 0; i < verseCount; i++)
             {
+                Debug.WriteLine($"Adding verse {verseList[i].number}");
                 var originalText = objBodyTextBox.TextFrame.TextRange.Text;
                 var verseText = "$" + verseList[i].number + "$ " + verseList[i].text + " ";
                 objBodyTextBox.TextFrame.TextRange.Text = objBodyTextBox.TextFrame.TextRange.Text + verseText;
@@ -48,12 +52,14 @@ namespace PowerWorshipVSTO
                         }
                     } else
                     {
+                        Debug.WriteLine($"Adding new slide");
+
                         // We have overshot the space available on our slide, so *undo* the extra text insertion
                         objBodyTextBox.TextFrame.TextRange.Text = originalText;
 
                         // ... and move to a new slide
                         currentSlide = currentSlide.Duplicate()[1];
-                        currentSlide.MoveTo(app.ActivePresentation.Slides.Count);
+                        numSlidesAdded++;
                         objBodyTextBox = currentSlide.Shapes[2];
                         objDescTextBox = currentSlide.Shapes[3];
 
@@ -64,7 +70,7 @@ namespace PowerWorshipVSTO
                     }
                 }
             }
-            var endSlideIndex = app.ActivePresentation.Slides.Count;
+            var endSlideIndex = startSlideIndex + numSlidesAdded;
 
             // Find the verse numbers (prefixed with a $) and superscript them, and remove the $
             for (int slideIndex = startSlideIndex; slideIndex <= endSlideIndex; slideIndex++)
@@ -83,29 +89,33 @@ namespace PowerWorshipVSTO
                     }
                 }
             }
-
-            goToEnd();
         }
 
         private Slide newSlideFromTemplate(Presentation templatePresentation)
         {
             Application app = Globals.ThisAddIn.Application;
+            var window = getMainWindow();
 
+            var insertAt = new SelectionManager().GetNextSlideIndex();
+            Debug.WriteLine($"Pasting at slide {insertAt}");
+            //window.View.GotoSlide(insertAt);
             templatePresentation.Slides[1].Copy();
-            if (app.ActivePresentation.Slides.Count > 0)
-            {
-                app.ActivePresentation.Windows[1].View.GotoSlide(app.ActivePresentation.Slides.Count);
-            }
-            app.ActivePresentation.Slides.Paste();
+            return app.ActivePresentation.Slides.Paste(insertAt)[1];
 
-            return app.ActivePresentation.Slides[app.ActivePresentation.Slides.Count];
         }
 
-        // TODO: Move to common location
-        public static void goToEnd()
+        public static DocumentWindow getMainWindow()
         {
             Application app = Globals.ThisAddIn.Application;
-            app.ActivePresentation.Windows[1].View.GotoSlide(app.ActivePresentation.Slides.Count);
+            foreach (DocumentWindow win in app.ActivePresentation.Windows)
+            {
+                // There is probably a better way...
+                if (!win.Caption.Contains("Presenter View"))
+                {
+                    return win;
+                }
+            }
+            return null;
         }
     }
 }
