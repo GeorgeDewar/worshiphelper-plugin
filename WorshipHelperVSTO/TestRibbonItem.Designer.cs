@@ -90,7 +90,7 @@ namespace PowerWorshipVSTO
             this.tab1.Groups.Add(this.group1);
             this.tab1.Groups.Add(this.favouritesGroup);
             this.tab1.Groups.Add(this.grpDebug);
-            this.tab1.Label = "PowerWorship";
+            this.tab1.Label = "WorshipHelper";
             this.tab1.Name = "tab1";
             // 
             // group1
