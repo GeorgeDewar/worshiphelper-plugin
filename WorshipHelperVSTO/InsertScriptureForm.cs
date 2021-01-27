@@ -21,7 +21,7 @@ namespace WorshipHelperVSTO
         {
             InitializeComponent();
 
-            var registryKey = Registry.CurrentUser.CreateSubKey(@"SOFTWARE\PowerWorship");
+            var registryKey = Registry.CurrentUser.CreateSubKey(@"SOFTWARE\WorshipHelper");
             var lastBible = registryKey.GetValue("LastBibleTranslation") as string;
 
             // Get a list of installed bibles
@@ -128,7 +128,7 @@ namespace WorshipHelperVSTO
 
             bible = OpenSongBibleReader.LoadTranslation(translationName);
 
-            var registryKey = Registry.CurrentUser.CreateSubKey(@"SOFTWARE\PowerWorship");
+            var registryKey = Registry.CurrentUser.CreateSubKey(@"SOFTWARE\WorshipHelper");
             registryKey.SetValue("LastBibleTranslation", translationName);
         }
     }

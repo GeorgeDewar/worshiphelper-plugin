@@ -14,7 +14,7 @@ namespace WorshipHelperVSTO
 
         public void InsertSong()
         {
-            var registryKey = Registry.CurrentUser.CreateSubKey(@"SOFTWARE\PowerWorship");
+            var registryKey = Registry.CurrentUser.CreateSubKey(@"SOFTWARE\WorshipHelper");
             var lastSongLocation = registryKey.GetValue("LastSongLocation") as string;
 
             FileDialog dialog = app.FileDialog[MsoFileDialogType.msoFileDialogOpen];

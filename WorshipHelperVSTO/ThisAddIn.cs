@@ -10,7 +10,7 @@ namespace WorshipHelperVSTO
 {
     public partial class ThisAddIn
     {
-        public static String appDataPath;// = $@"{Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments)}\PowerWorship";
+        public static String appDataPath;// = $@"{Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments)}\WorshipHelper";
 
         // NOTE: We need a backing field to prevent the delegate being garbage collected
         private SafeNativeMethods.HookProc _keyboardProc;

@@ -11,7 +11,7 @@ namespace WorshipHelperVSTO
     {
         private void TestRibbonItem_Load(object sender, RibbonUIEventArgs e)
         {
-            var favRegistryKey = Registry.CurrentUser.CreateSubKey(@"SOFTWARE\PowerWorship\Favourites");
+            var favRegistryKey = Registry.CurrentUser.CreateSubKey(@"SOFTWARE\WorshipHelper\Favourites");
             var favouriteCount = favRegistryKey.GetValueNames().Length;
             for (int i=0; i < favouriteCount; i++)
             {
@@ -67,7 +67,7 @@ namespace WorshipHelperVSTO
 
         private void btnRemoveOneClick_Click(object sender, RibbonControlEventArgs e)
         {
-            var favRegistryKey = Registry.CurrentUser.CreateSubKey(@"SOFTWARE\PowerWorship\Favourites");
+            var favRegistryKey = Registry.CurrentUser.CreateSubKey(@"SOFTWARE\WorshipHelper\Favourites");
             var fileName = (sender as RibbonControl).Parent.Tag as string;
             try
             {
@@ -85,8 +85,8 @@ namespace WorshipHelperVSTO
         {
             Application app = Globals.ThisAddIn.Application;
 
-            var registryKey = Registry.CurrentUser.CreateSubKey(@"SOFTWARE\PowerWorship");
-            var favRegistryKey = Registry.CurrentUser.CreateSubKey(@"SOFTWARE\PowerWorship\Favourites");
+            var registryKey = Registry.CurrentUser.CreateSubKey(@"SOFTWARE\WorshipHelper");
+            var favRegistryKey = Registry.CurrentUser.CreateSubKey(@"SOFTWARE\WorshipHelper\Favourites");
 
             if (favRegistryKey.GetValueNames().Length >= 5) {
                 System.Windows.Forms.MessageBox.Show("No more favourites can be added");

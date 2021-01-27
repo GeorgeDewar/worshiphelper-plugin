@@ -2,7 +2,7 @@
 <Project ToolsVersion="Current" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <PublishUrlHistory>publish\</PublishUrlHistory>
-    <InstallUrlHistory>https://dewar.co.nz/PowerWorship/|http://dewar.co.nz/</InstallUrlHistory>
+    <InstallUrlHistory>https://dewar.co.nz/WorshipHelper/|http://dewar.co.nz/</InstallUrlHistory>
     <SupportUrlHistory />
     <ProjectView>ShowAllFiles</ProjectView>
   </PropertyGroup>
