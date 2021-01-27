@@ -12,7 +12,7 @@ namespace WorshipHelperVSTO
         private readonly ScriptureManager scriptureManager = new ScriptureManager();
         private readonly SongManager songManager = new SongManager();
         private readonly Bible bible = OpenSongBibleReader.LoadTranslation("NASB");
-        private readonly ScriptureTemplate template = new ScriptureTemplate($@"{ThisAddIn.appDataPath}\Templates\ScriptureTemplate.pptx");
+        private readonly ScriptureTemplate template = new ScriptureTemplate($@"{ThisAddIn.appDataPath}\Templates\Default.pptx");
 
         private readonly int DELAY = 500;
 

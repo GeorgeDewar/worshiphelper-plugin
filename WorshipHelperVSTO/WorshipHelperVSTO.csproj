@@ -223,7 +223,7 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="data\Bibles\README.md" />
-    <None Include="data\Templates\ScriptureTemplate.pptx">
+    <None Include="data\Templates\Default.pptx">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="WorshipHelperVSTO_TemporaryKey.pfx" />
