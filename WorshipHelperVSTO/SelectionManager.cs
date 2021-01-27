@@ -11,10 +11,11 @@ namespace WorshipHelperVSTO
     class SelectionManager
     {
         Application app = Globals.ThisAddIn.Application;
+        WindowManager windowManager = new WindowManager();
 
         public int GetNextSlideIndex()
         {
-            var window = getMainWindow(); // i.e. not the presenter view
+            var window = windowManager.GetMainWindow(); // i.e. not the presenter view
             var index = -1;
 
             // If there are no slides, it is 1
@@ -50,7 +51,7 @@ namespace WorshipHelperVSTO
 
         public void GoToSlide(int index)
         {
-            var window = getMainWindow();
+            var window = windowManager.GetMainWindow();
             window.View.GotoSlide(index);
         }
 
@@ -69,19 +70,6 @@ namespace WorshipHelperVSTO
             var activeWindow = app.ActiveWindow;
             activeWindow.ViewType = PpViewType.ppViewSlide;
             activeWindow.ViewType = PpViewType.ppViewNormal;
-        }
-
-        private DocumentWindow getMainWindow()
-        {
-            foreach (DocumentWindow win in app.ActivePresentation.Windows)
-            {
-                // There is probably a better way...
-                if (!win.Caption.Contains("Presenter View"))
-                {
-                    return win;
-                }
-            }
-            return null;
         }
     }
 }
