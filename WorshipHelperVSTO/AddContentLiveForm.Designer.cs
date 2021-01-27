@@ -31,9 +31,10 @@
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(AddContentLiveForm));
             this.btnScripture = new System.Windows.Forms.Button();
-            this.btnSong = new System.Windows.Forms.Button();
             this.imageList1 = new System.Windows.Forms.ImageList(this.components);
+            this.btnSong = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
+            this.btnCancel = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // btnScripture
@@ -52,6 +53,13 @@
             this.btnScripture.UseVisualStyleBackColor = true;
             this.btnScripture.Click += new System.EventHandler(this.btnScripture_Click);
             // 
+            // imageList1
+            // 
+            this.imageList1.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("imageList1.ImageStream")));
+            this.imageList1.TransparentColor = System.Drawing.Color.Transparent;
+            this.imageList1.Images.SetKeyName(0, "bible.png");
+            this.imageList1.Images.SetKeyName(1, "music-note.png");
+            // 
             // btnSong
             // 
             this.btnSong.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
@@ -68,13 +76,6 @@
             this.btnSong.UseVisualStyleBackColor = true;
             this.btnSong.Click += new System.EventHandler(this.btnSong_Click);
             // 
-            // imageList1
-            // 
-            this.imageList1.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("imageList1.ImageStream")));
-            this.imageList1.TransparentColor = System.Drawing.Color.Transparent;
-            this.imageList1.Images.SetKeyName(0, "bible.png");
-            this.imageList1.Images.SetKeyName(1, "music-note.png");
-            // 
             // label1
             // 
             this.label1.AutoSize = true;
@@ -84,11 +85,24 @@
             this.label1.TabIndex = 2;
             this.label1.Text = "The added content will be inserted after the currently displayed slide";
             // 
+            // btnCancel
+            // 
+            this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.btnCancel.Location = new System.Drawing.Point(39, 289);
+            this.btnCancel.Name = "btnCancel";
+            this.btnCancel.Size = new System.Drawing.Size(75, 23);
+            this.btnCancel.TabIndex = 3;
+            this.btnCancel.Text = "Cancel";
+            this.btnCancel.UseVisualStyleBackColor = true;
+            this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
+            // 
             // AddContentLiveForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(620, 312);
+            this.CancelButton = this.btnCancel;
+            this.ClientSize = new System.Drawing.Size(620, 337);
+            this.Controls.Add(this.btnCancel);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.btnSong);
             this.Controls.Add(this.btnScripture);
@@ -105,5 +119,6 @@
         private System.Windows.Forms.Button btnSong;
         private System.Windows.Forms.ImageList imageList1;
         private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Button btnCancel;
     }
 }

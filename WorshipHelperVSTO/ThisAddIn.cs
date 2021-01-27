@@ -54,21 +54,34 @@ namespace WorshipHelperVSTO
             {
                 // Various attempts to decode this value as a proper struct were unsuccessful, with memory violation errors...
                 bool keyUp = (lParam.ToInt32() & 0xC0000000) != 0 && nCode == 0;
+                if (!keyUp)
+                {
+                    return SafeNativeMethods.CallNextHookEx(_hookIdKeyboard, nCode, wParam, lParam);
+                }
+
+                bool formOpen = System.Windows.Forms.Application.OpenForms.Count > 0;
+                if (formOpen)
+                {
+                    Debug.WriteLine("Ignoring key press while form open");
+                    return SafeNativeMethods.CallNextHookEx(_hookIdKeyboard, nCode, wParam, lParam);
+                }
 
                 bool presenting = false;
                 if (app.Presentations.Count > 0) // if there is a presentation, there is an active presentation
                 {
                     foreach (DocumentWindow win in app.ActivePresentation.Windows)
                     {
+                        //Debug.WriteLine($"Window: {win.Caption}");
                         // There is probably a better way...
                         if (win.Caption.Contains("Presenter View") && win.Active == Microsoft.Office.Core.MsoTriState.msoTrue)
                         {
+
                             presenting = true;
                         }
                     }
                 }
 
-                if (keyUp && presenting)
+                if (presenting)
                 {
                     char keyPressed = (char)wParam.ToInt32();
                     if (keyPressed == 'A')
@@ -78,18 +91,13 @@ namespace WorshipHelperVSTO
                     } else if (keyPressed == 'L')
                     {
                         // Go to logo
-                        System.Windows.Forms.MessageBox.Show($"Key detected: Go to Logo");
+                        Debug.WriteLine($"Key detected: Go to Logo");
                     }
-                    
                 }
                 
             }
 
-            return SafeNativeMethods.CallNextHookEx(
-                _hookIdKeyboard,
-                nCode,
-                wParam,
-                lParam);
+            return SafeNativeMethods.CallNextHookEx(_hookIdKeyboard, nCode, wParam, lParam);
         }
 
         [StructLayout(LayoutKind.Sequential)]
