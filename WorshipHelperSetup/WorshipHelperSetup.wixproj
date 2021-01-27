@@ -6,15 +6,15 @@
     <ProductVersion>3.10</ProductVersion>
     <ProjectGuid>6899b59e-171f-4984-8fd8-1718b5ecf54e</ProjectGuid>
     <SchemaVersion>2.0</SchemaVersion>
-    <OutputName>PowerWorshipSetup</OutputName>
+    <OutputName>WorshipHelperSetup</OutputName>
     <OutputType>Package</OutputType>
     <Name>WorshipHelperSetup</Name>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
     <OutputPath>bin\$(Configuration)\</OutputPath>
     <IntermediateOutputPath>obj\$(Configuration)\</IntermediateOutputPath>
-    <DefineConstants>Debug;AddInFiles=..\PowerWorshipVSTO\publish\</DefineConstants>
-    <WixVariables>AddInFiles=..\PowerWorshipVSTO\publish\</WixVariables>
+    <DefineConstants>Debug;AddInFiles=..\WorshipHelperVSTO\publish\</DefineConstants>
+    <WixVariables>AddInFiles=..\WorshipHelperVSTO\publish\</WixVariables>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
     <OutputPath>bin\$(Configuration)\</OutputPath>
@@ -33,7 +33,7 @@
     <EmbeddedResource Include="Strings1.wxl" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\PowerWorshipVSTO\WorshipHelperVSTO.csproj">
+    <ProjectReference Include="..\WorshipHelperVSTO\WorshipHelperVSTO.csproj">
       <Name>WorshipHelperVSTO</Name>
       <Project>{0094f931-275e-4b27-8843-08672ede0224}</Project>
       <Private>True</Private>
