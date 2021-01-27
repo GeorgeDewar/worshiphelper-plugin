@@ -11,7 +11,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace PowerWorshipVSTO
+namespace WorshipHelperVSTO
 {
     public partial class InsertScriptureForm : Form
     {

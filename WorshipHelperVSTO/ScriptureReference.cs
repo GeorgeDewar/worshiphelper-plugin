@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
 
-namespace PowerWorshipVSTO
+namespace WorshipHelperVSTO
 {
     class ScriptureReference
     {

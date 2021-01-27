@@ -6,7 +6,7 @@ using System.Diagnostics;
 using System.IO;
 using static Microsoft.Office.Core.MsoTriState;
 
-namespace PowerWorshipVSTO
+namespace WorshipHelperVSTO
 {
     class SongManager
     {

@@ -5,7 +5,7 @@ using Microsoft.Office.Interop.PowerPoint;
 using Microsoft.Win32;
 using System.IO;
 
-namespace PowerWorshipVSTO
+namespace WorshipHelperVSTO
 {
     public partial class TestRibbonItem
     {

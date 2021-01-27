@@ -4,7 +4,7 @@ using Microsoft.Win32;
 using System.Collections.Generic;
 using System.IO;
 
-namespace PowerWorshipVSTO
+namespace WorshipHelperVSTO
 {
     partial class TestRibbonItem : Microsoft.Office.Tools.Ribbon.RibbonBase
     {
@@ -103,7 +103,7 @@ namespace PowerWorshipVSTO
             // btnInsertScripture
             // 
             this.btnInsertScripture.ControlSize = Microsoft.Office.Core.RibbonControlSize.RibbonControlSizeLarge;
-            this.btnInsertScripture.Image = global::PowerWorshipVSTO.Properties.Resources._22633_200;
+            this.btnInsertScripture.Image = global::WorshipHelperVSTO.Properties.Resources._22633_200;
             this.btnInsertScripture.Label = "Add Scripture";
             this.btnInsertScripture.Name = "btnInsertScripture";
             this.btnInsertScripture.ShowImage = true;
@@ -112,7 +112,7 @@ namespace PowerWorshipVSTO
             // btnInsertSong
             // 
             this.btnInsertSong.ControlSize = Microsoft.Office.Core.RibbonControlSize.RibbonControlSizeLarge;
-            this.btnInsertSong.Image = global::PowerWorshipVSTO.Properties.Resources.music_note_6;
+            this.btnInsertSong.Image = global::WorshipHelperVSTO.Properties.Resources.music_note_6;
             this.btnInsertSong.Label = "Add Song";
             this.btnInsertSong.Name = "btnInsertSong";
             this.btnInsertSong.ShowImage = true;
@@ -127,7 +127,7 @@ namespace PowerWorshipVSTO
             // btnAddFavourite
             // 
             this.btnAddFavourite.ControlSize = Microsoft.Office.Core.RibbonControlSize.RibbonControlSizeLarge;
-            this.btnAddFavourite.Image = global::PowerWorshipVSTO.Properties.Resources.icon_plus;
+            this.btnAddFavourite.Image = global::WorshipHelperVSTO.Properties.Resources.icon_plus;
             this.btnAddFavourite.Label = "Add Favourite";
             this.btnAddFavourite.Name = "btnAddFavourite";
             this.btnAddFavourite.ShowImage = true;

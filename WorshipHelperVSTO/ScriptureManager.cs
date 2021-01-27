@@ -3,7 +3,7 @@ using System.Diagnostics;
 using System.Linq;
 using static Microsoft.Office.Core.MsoTriState;
 
-namespace PowerWorshipVSTO
+namespace WorshipHelperVSTO
 {
     class ScriptureManager
     {

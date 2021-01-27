@@ -6,7 +6,7 @@ using System.IO;
 using System.Runtime.InteropServices;
 using System.Threading;
 
-namespace PowerWorshipVSTO
+namespace WorshipHelperVSTO
 {
     public partial class ThisAddIn
     {

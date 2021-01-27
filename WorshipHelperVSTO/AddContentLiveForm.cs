@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace PowerWorshipVSTO
+namespace WorshipHelperVSTO
 {
     public partial class AddContentLiveForm : Form
     {

@@ -1,4 +1,4 @@
-﻿namespace PowerWorshipVSTO
+﻿namespace WorshipHelperVSTO
 {
     partial class AddContentLiveForm
     {
