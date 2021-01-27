@@ -8,23 +8,6 @@ using System.Windows.Forms;
 
 namespace WorshipHelperVSTO
 {
-    public class ScriptureTemplate
-    {
-        public string name { get; }
-        public string path { get; }
-
-        public ScriptureTemplate(string path)
-        {
-            this.path = path;
-            this.name = path.Split(new char[] { '\\' }).Last().Replace(".pptx", "");
-        }
-
-        override public string ToString()
-        {
-            return name;
-        }
-    }
-
     public partial class InsertScriptureForm : Form
     {
         Bible bible;
@@ -39,7 +22,9 @@ namespace WorshipHelperVSTO
 
             // Get a list of available templates, populate list and set initial selection
             var installedTemplateFiles = Directory.GetFiles($@"{ThisAddIn.appDataPath}\Templates", "*.pptx");
-            foreach (var file in installedTemplateFiles)
+            Directory.CreateDirectory($@"{ThisAddIn.userDataPath}\UserTemplates\Scripture");
+            var userTemplateFiles = Directory.GetFiles($@"{ThisAddIn.userDataPath}\UserTemplates\Scripture", "*.pptx");
+            foreach (var file in installedTemplateFiles.Concat(userTemplateFiles))
             {
                 var template = new ScriptureTemplate(file);
                 cmbTemplate.Items.Add(template);
@@ -159,6 +144,31 @@ namespace WorshipHelperVSTO
 
             var registryKey = Registry.CurrentUser.CreateSubKey(@"SOFTWARE\WorshipHelper");
             registryKey.SetValue("LastBibleTranslation", translationName);
+        }
+
+        private void cmbTemplate_SelectionChangeCommitted(object sender, EventArgs e)
+        {
+            var box = (sender as ComboBox);
+            var template = box.SelectedItem as ScriptureTemplate;
+            var registryKey = Registry.CurrentUser.CreateSubKey(@"SOFTWARE\WorshipHelper");
+            registryKey.SetValue("LastScriptureTemplate", template.name);
+        }
+    }
+
+    public class ScriptureTemplate
+    {
+        public string name { get; }
+        public string path { get; }
+
+        public ScriptureTemplate(string path)
+        {
+            this.path = path;
+            this.name = path.Split(new char[] { '\\' }).Last().Replace(".pptx", "");
+        }
+
+        override public string ToString()
+        {
+            return name;
         }
     }
 }

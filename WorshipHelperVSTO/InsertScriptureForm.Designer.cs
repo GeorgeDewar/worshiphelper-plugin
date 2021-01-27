@@ -132,6 +132,7 @@
             this.cmbTemplate.Name = "cmbTemplate";
             this.cmbTemplate.Size = new System.Drawing.Size(198, 21);
             this.cmbTemplate.TabIndex = 11;
+            this.cmbTemplate.SelectionChangeCommitted += new System.EventHandler(this.cmbTemplate_SelectionChangeCommitted);
             // 
             // InsertScriptureForm
             // 
