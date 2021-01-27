@@ -30,7 +30,7 @@ namespace WorshipHelperVSTO
             InsertSlide();
             songManager.InsertSongFromFile(TestFilePath("TestSong1.pptx"));
             await Task.Delay(DELAY);
-            scriptureManager.addScripture(bible, "Genesis", 1, 1, 2);
+            scriptureManager.addScripture("ScriptureTemplate", bible, "Genesis", 1, 1, 2);
             await Task.Delay(DELAY);
             songManager.InsertSongFromFile(TestFilePath("TestSong2.pptx"));
 
@@ -48,7 +48,7 @@ namespace WorshipHelperVSTO
         private async Task TestSequentialInsertWithScriptureFirst()
         {
             ClearPresentation();
-            scriptureManager.addScripture(bible, "Genesis", 1, 1, 2);
+            scriptureManager.addScripture("ScriptureTemplate", bible, "Genesis", 1, 1, 2);
             await Task.Delay(DELAY);
             songManager.InsertSongFromFile(TestFilePath("TestSong1.pptx"));
             await Task.Delay(DELAY);
@@ -73,7 +73,7 @@ namespace WorshipHelperVSTO
             await Task.Delay(DELAY);
 
             new SelectionManager().GoToSlide(3);
-            scriptureManager.addScripture(bible, "Genesis", 1, 1, 2);
+            scriptureManager.addScripture("ScriptureTemplate", bible, "Genesis", 1, 1, 2);
 
             var index = 1;
             assertSongContent(index++, "Song 1 Slide 1");
@@ -91,7 +91,7 @@ namespace WorshipHelperVSTO
             songManager.InsertSongFromFile(TestFilePath("TestSong1.pptx"));
             await Task.Delay(DELAY);
             
-            scriptureManager.addScripture(bible, "Genesis", 1, 1, 2);
+            scriptureManager.addScripture("ScriptureTemplate", bible, "Genesis", 1, 1, 2);
             await Task.Delay(DELAY);
 
             var index = 1;

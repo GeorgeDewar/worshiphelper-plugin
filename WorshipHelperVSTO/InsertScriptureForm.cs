@@ -17,10 +17,27 @@ namespace WorshipHelperVSTO
             InitializeComponent();
 
             var registryKey = Registry.CurrentUser.CreateSubKey(@"SOFTWARE\WorshipHelper");
+            var lastTemplate = registryKey.GetValue("LastScriptureTemplate") as string;
             var lastBible = registryKey.GetValue("LastBibleTranslation") as string;
 
-            // Get a list of installed bibles
-            var installedBibleFiles = Directory.GetFiles($@"{ThisAddIn.appDataPath}\Bibles");
+            // Get a list of available templates, populate list and set initial selection
+            var installedTemplateFiles = Directory.GetFiles($@"{ThisAddIn.appDataPath}\Templates", "*.pptx");
+            foreach (var file in installedTemplateFiles)
+            {
+                var templateName = file.Split(new char[] { '\\' }).Last().Replace(".pptx", "");
+                cmbTemplate.Items.Add(templateName);
+                if (templateName == lastTemplate)
+                {
+                    cmbTemplate.SelectedItem = templateName;
+                }
+            }
+            if (cmbTemplate.SelectedItem == null)
+            {
+                cmbTemplate.SelectedIndex = 0;
+            }
+
+            // Get a list of installed bibles, populate list and set initial selection
+            var installedBibleFiles = Directory.GetFiles($@"{ThisAddIn.appDataPath}\Bibles", "*.xmm");
             foreach (var file in installedBibleFiles)
             {
                 var bibleName = file.Split(new char[] { '\\' }).Last().Replace(".xmm", "");
@@ -102,7 +119,7 @@ namespace WorshipHelperVSTO
                 verseNumEnd = chapter.verses.Last().number;
             }
 
-            new ScriptureManager().addScripture(bible, book.name, chapterNum, verseNumStart, verseNumEnd);
+            new ScriptureManager().addScripture(cmbTemplate.SelectedItem as string, bible, book.name, chapterNum, verseNumStart, verseNumEnd);
             this.Close();
         }
 
