@@ -1,10 +1,8 @@
 ﻿using Microsoft.Office.Interop.PowerPoint;
-using Microsoft.Office.Tools;
 using System;
 using System.Diagnostics;
 using System.IO;
 using System.Runtime.InteropServices;
-using System.Threading;
 
 namespace WorshipHelperVSTO
 {

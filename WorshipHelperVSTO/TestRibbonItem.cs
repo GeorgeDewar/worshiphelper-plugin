@@ -1,9 +1,7 @@
 ﻿using Microsoft.Office.Core;
-using static Microsoft.Office.Core.MsoTriState;
 using Microsoft.Office.Tools.Ribbon;
 using Microsoft.Office.Interop.PowerPoint;
 using Microsoft.Win32;
-using System.IO;
 
 namespace WorshipHelperVSTO
 {
