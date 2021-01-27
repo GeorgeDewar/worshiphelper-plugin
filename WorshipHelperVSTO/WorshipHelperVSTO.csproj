@@ -196,6 +196,7 @@
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="WindowManager.cs" />
     <EmbeddedResource Include="AddContentLiveForm.resx">
       <DependentUpon>AddContentLiveForm.cs</DependentUpon>
     </EmbeddedResource>

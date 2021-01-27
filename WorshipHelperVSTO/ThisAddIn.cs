@@ -66,20 +66,8 @@ namespace WorshipHelperVSTO
                     return SafeNativeMethods.CallNextHookEx(_hookIdKeyboard, nCode, wParam, lParam);
                 }
 
-                bool presenting = false;
-                if (app.Presentations.Count > 0) // if there is a presentation, there is an active presentation
-                {
-                    foreach (DocumentWindow win in app.ActivePresentation.Windows)
-                    {
-                        //Debug.WriteLine($"Window: {win.Caption}");
-                        // There is probably a better way...
-                        if (win.Caption.Contains("Presenter View") && win.Active == Microsoft.Office.Core.MsoTriState.msoTrue)
-                        {
-
-                            presenting = true;
-                        }
-                    }
-                }
+                DocumentWindow presenterView = new WindowManager().GetPresenterView();
+                bool presenting = presenterView != null && presenterView.Active == Microsoft.Office.Core.MsoTriState.msoTrue;
 
                 if (presenting)
                 {

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Office.Interop.PowerPoint;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -26,6 +27,9 @@ namespace WorshipHelperVSTO
         private void btnSong_Click(object sender, EventArgs e)
         {
             new SongManager().InsertSong();
+            // After inserting the song, we are left with the main window in focus
+            DocumentWindow presenterView = new WindowManager().GetPresenterView();
+            presenterView.Activate();
             Close();
         }
 
