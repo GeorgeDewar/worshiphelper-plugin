@@ -9,15 +9,15 @@ namespace WorshipHelperVSTO
     {
         int maxHeight = 400;
 
-        public void addScripture(string templateName, Bible bible, string bookName, int chapterNum, int verseNumStart, int verseNumEnd)
+        public void addScripture(ScriptureTemplate template, Bible bible, string bookName, int chapterNum, int verseNumStart, int verseNumEnd)
         {
-            Debug.WriteLine($"Inserting scripture from {bookName} {chapterNum}:{verseNumStart}-{verseNumEnd} ({bible.name})");
+            Debug.WriteLine($"Inserting scripture from {bookName} {chapterNum}:{verseNumStart}-{verseNumEnd} ({bible.name}) using template {template.name}");
             var verseCount = verseNumEnd - verseNumStart + 1;
 
             Application app = Globals.ThisAddIn.Application;
             
             // Copy the template from the template presentation, and close it
-            Presentation templatePresentation = app.Presentations.Open($@"{ThisAddIn.appDataPath}\Templates\{templateName}.pptx", msoTrue, msoFalse, msoFalse);
+            Presentation templatePresentation = app.Presentations.Open(template.path, msoTrue, msoFalse, msoFalse);
             var currentSlide = newSlideFromTemplate(templatePresentation);
             templatePresentation.Close();
 

@@ -8,6 +8,23 @@ using System.Windows.Forms;
 
 namespace WorshipHelperVSTO
 {
+    public class ScriptureTemplate
+    {
+        public string name { get; }
+        public string path { get; }
+
+        public ScriptureTemplate(string path)
+        {
+            this.path = path;
+            this.name = path.Split(new char[] { '\\' }).Last().Replace(".pptx", "");
+        }
+
+        override public string ToString()
+        {
+            return name;
+        }
+    }
+
     public partial class InsertScriptureForm : Form
     {
         Bible bible;
@@ -24,11 +41,11 @@ namespace WorshipHelperVSTO
             var installedTemplateFiles = Directory.GetFiles($@"{ThisAddIn.appDataPath}\Templates", "*.pptx");
             foreach (var file in installedTemplateFiles)
             {
-                var templateName = file.Split(new char[] { '\\' }).Last().Replace(".pptx", "");
-                cmbTemplate.Items.Add(templateName);
-                if (templateName == lastTemplate)
+                var template = new ScriptureTemplate(file);
+                cmbTemplate.Items.Add(template);
+                if (template.name == lastTemplate)
                 {
-                    cmbTemplate.SelectedItem = templateName;
+                    cmbTemplate.SelectedItem = template;
                 }
             }
             if (cmbTemplate.SelectedItem == null)
@@ -119,7 +136,7 @@ namespace WorshipHelperVSTO
                 verseNumEnd = chapter.verses.Last().number;
             }
 
-            new ScriptureManager().addScripture(cmbTemplate.SelectedItem as string, bible, book.name, chapterNum, verseNumStart, verseNumEnd);
+            new ScriptureManager().addScripture(cmbTemplate.SelectedItem as ScriptureTemplate, bible, book.name, chapterNum, verseNumStart, verseNumEnd);
             this.Close();
         }
 
