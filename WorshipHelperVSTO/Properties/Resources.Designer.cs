@@ -63,9 +63,9 @@ namespace WorshipHelperVSTO.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap _22633_200 {
+        internal static System.Drawing.Bitmap bible {
             get {
-                object obj = ResourceManager.GetObject("22633-200", resourceCulture);
+                object obj = ResourceManager.GetObject("bible", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -83,10 +83,9 @@ namespace WorshipHelperVSTO.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap microsoft_powerpoint_computer_icons_clip_art_presentation_slide_vector_graphics_png_favpng_1fbdUWQVUmj03uyMzadXbfFG8 {
+        internal static System.Drawing.Bitmap music_note {
             get {
-                object obj = ResourceManager.GetObject("microsoft-powerpoint-computer-icons-clip-art-presentation-slide-vector-graphics-p" +
-                        "ng-favpng-1fbdUWQVUmj03uyMzadXbfFG8", resourceCulture);
+                object obj = ResourceManager.GetObject("music-note", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -94,9 +93,9 @@ namespace WorshipHelperVSTO.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap music_note_6 {
+        internal static System.Drawing.Bitmap powerpoint_logo {
             get {
-                object obj = ResourceManager.GetObject("music-note-6", resourceCulture);
+                object obj = ResourceManager.GetObject("powerpoint-logo", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

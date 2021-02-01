@@ -31,7 +31,7 @@ namespace WorshipHelperVSTO
                 slideButton.ControlSize = RibbonControlSize.RibbonControlSizeLarge;
                 slideButton.Visible = false;
 
-                var img = Properties.Resources.microsoft_powerpoint_computer_icons_clip_art_presentation_slide_vector_graphics_png_favpng_1fbdUWQVUmj03uyMzadXbfFG8;
+                var img = Properties.Resources.powerpoint_logo;
                 slideButton.Image = img;
                 slideButton.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.btnInsertOneClick_Click);
 
@@ -103,7 +103,7 @@ namespace WorshipHelperVSTO
             // btnInsertScripture
             // 
             this.btnInsertScripture.ControlSize = Microsoft.Office.Core.RibbonControlSize.RibbonControlSizeLarge;
-            this.btnInsertScripture.Image = global::WorshipHelperVSTO.Properties.Resources._22633_200;
+            this.btnInsertScripture.Image = global::WorshipHelperVSTO.Properties.Resources.bible;
             this.btnInsertScripture.Label = "Add Scripture";
             this.btnInsertScripture.Name = "btnInsertScripture";
             this.btnInsertScripture.ShowImage = true;
@@ -112,7 +112,7 @@ namespace WorshipHelperVSTO
             // btnInsertSong
             // 
             this.btnInsertSong.ControlSize = Microsoft.Office.Core.RibbonControlSize.RibbonControlSizeLarge;
-            this.btnInsertSong.Image = global::WorshipHelperVSTO.Properties.Resources.music_note_6;
+            this.btnInsertSong.Image = global::WorshipHelperVSTO.Properties.Resources.music_note;
             this.btnInsertSong.Label = "Add Song";
             this.btnInsertSong.Name = "btnInsertSong";
             this.btnInsertSong.ShowImage = true;
