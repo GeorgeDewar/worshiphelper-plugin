@@ -1,5 +1,5 @@
-﻿using Microsoft.Office.Interop.PowerPoint;
-using System.Diagnostics;
+﻿using log4net;
+using Microsoft.Office.Interop.PowerPoint;
 using System.Linq;
 using static Microsoft.Office.Core.MsoTriState;
 
@@ -7,11 +7,12 @@ namespace WorshipHelperVSTO
 {
     class ScriptureManager
     {
+        private static readonly ILog log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
         int maxHeight = 400;
 
         public void addScripture(ScriptureTemplate template, Bible bible, string bookName, int chapterNum, int verseNumStart, int verseNumEnd)
         {
-            Debug.WriteLine($"Inserting scripture from {bookName} {chapterNum}:{verseNumStart}-{verseNumEnd} ({bible.name}) using template {template.name}");
+            log.Debug($"Inserting scripture from {bookName} {chapterNum}:{verseNumStart}-{verseNumEnd} ({bible.name}) using template {template.name}");
             var verseCount = verseNumEnd - verseNumStart + 1;
 
             Application app = Globals.ThisAddIn.Application;
@@ -37,7 +38,7 @@ namespace WorshipHelperVSTO
             var numSlidesAdded = 0;
             for (int i = 0; i < verseCount; i++)
             {
-                Debug.WriteLine($"Adding verse {verseList[i].number}");
+                log.Debug($"Adding verse {verseList[i].number}");
                 var originalText = objBodyTextBox.TextFrame.TextRange.Text;
                 var verseText = "$" + verseList[i].number + "$ " + verseList[i].text + " ";
                 objBodyTextBox.TextFrame.TextRange.Text = objBodyTextBox.TextFrame.TextRange.Text + verseText;
@@ -52,7 +53,7 @@ namespace WorshipHelperVSTO
                         }
                     } else
                     {
-                        Debug.WriteLine($"Adding new slide");
+                        log.Debug($"Adding new slide");
 
                         // We have overshot the space available on our slide, so *undo* the extra text insertion
                         objBodyTextBox.TextFrame.TextRange.Text = originalText;
@@ -97,7 +98,7 @@ namespace WorshipHelperVSTO
             var window = getMainWindow();
 
             var insertAt = new SelectionManager().GetNextSlideIndex();
-            Debug.WriteLine($"Pasting at slide {insertAt}");
+            log.Debug($"Pasting at slide {insertAt}");
             //window.View.GotoSlide(insertAt);
             templatePresentation.Slides[1].Copy();
             return app.ActivePresentation.Slides.Paste(insertAt)[1];
