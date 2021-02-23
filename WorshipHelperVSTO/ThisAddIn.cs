@@ -19,7 +19,7 @@ namespace WorshipHelperVSTO
         private void ThisAddIn_Startup(object sender, EventArgs e)
         {
             _keyboardProc = KeyboardHookCallback;
-
+            log4net.Config.XmlConfigurator.Configure();
             SetWindowsHooks();
         }
 

@@ -1,4 +1,5 @@
-﻿using Microsoft.Win32;
+﻿using log4net;
+using Microsoft.Win32;
 using System;
 using System.Data;
 using System.IO;
@@ -10,10 +11,12 @@ namespace WorshipHelperVSTO
 {
     public partial class InsertScriptureForm : Form
     {
+        private static readonly ILog log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
         Bible bible;
 
         public InsertScriptureForm()
         {
+            log.Info("Loading InsertScriptureForm");
             InitializeComponent();
 
             var registryKey = Registry.CurrentUser.CreateSubKey(@"SOFTWARE\WorshipHelper");
@@ -21,6 +24,7 @@ namespace WorshipHelperVSTO
             var lastBible = registryKey.GetValue("LastBibleTranslation") as string;
 
             // Get a list of available templates, populate list and set initial selection
+            log.Debug("Loading scripture templates");
             var installedTemplateFiles = Directory.GetFiles($@"{ThisAddIn.appDataPath}\Templates", "*.pptx");
             Directory.CreateDirectory($@"{ThisAddIn.userDataPath}\UserTemplates\Scripture");
             var userTemplateFiles = Directory.GetFiles($@"{ThisAddIn.userDataPath}\UserTemplates\Scripture", "*.pptx");
@@ -39,6 +43,7 @@ namespace WorshipHelperVSTO
             }
 
             // Get a list of installed bibles, populate list and set initial selection
+            log.Debug("Loading bibles");
             var installedBibleFiles = Directory.GetFiles($@"{ThisAddIn.appDataPath}\Bibles", "*.xmm");
             foreach (var file in installedBibleFiles)
             {
@@ -55,9 +60,11 @@ namespace WorshipHelperVSTO
             }
 
             // Initialise so that we can populate the books
+            log.Debug($"Loading default bible ({cmbTranslation.SelectedItem})");
             bible = OpenSongBibleReader.LoadTranslation(cmbTranslation.SelectedItem as string);
 
             var source = new AutoCompleteStringCollection();
+            log.Debug("Adding books");
             source.AddRange(bible.books.Select(book => book.name).ToArray());
             txtBook.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
             txtBook.AutoCompleteSource = AutoCompleteSource.CustomSource;
@@ -66,7 +73,6 @@ namespace WorshipHelperVSTO
 
         private void txtSearchBox_TextChanged(object sender, EventArgs e)
         {
-            var text = (sender as TextBox).Text;
             btnInsert.Enabled = isValidReference();
         }
 
@@ -77,6 +83,7 @@ namespace WorshipHelperVSTO
 
         private bool isValidReference()
         {
+            log.Debug($"Checking reference validity (book: {txtBook.Text}, reference: {txtReference.Text})");
             var bookNames = bible.books.Select(book => book.name.ToLower()).ToList();
 
             var validBook = bookNames.Contains(txtBook.Text.ToLower());
@@ -86,6 +93,7 @@ namespace WorshipHelperVSTO
             {
                 try
                 {
+                    log.Debug("Book and reference appear structurally valid; parsing...");
                     ScriptureReference.parse(bible, txtBook.Text, txtReference.Text);
                     return true;
                 } catch(Exception e)
@@ -101,12 +109,16 @@ namespace WorshipHelperVSTO
 
         private void btnInsert_Click(object sender, EventArgs e)
         {
+            log.Info("About to insert scripture");
+            log.Debug("Finding book");
             var book = bible.books.Find(bookItem => bookItem.name.ToLower() == txtBook.Text.ToLower());
             var referenceParts = txtReference.Text.Split(new char[] { ':', '-' });
 
+            log.Debug("Finding chapter");
             var chapterNum = Int32.Parse(referenceParts[0]);
             var chapter = book.chapters.Find(chapterItem => chapterItem.number == chapterNum);
 
+            log.Debug("Finding verses");
             int verseNumStart;
             int verseNumEnd;
             if (referenceParts.Length > 2) {
@@ -121,7 +133,9 @@ namespace WorshipHelperVSTO
                 verseNumEnd = chapter.verses.Last().number;
             }
 
+            log.Debug("Inserting");
             new ScriptureManager().addScripture(cmbTemplate.SelectedItem as ScriptureTemplate, bible, book.name, chapterNum, verseNumStart, verseNumEnd);
+            log.Debug("Closing");
             this.Close();
         }
 
@@ -139,6 +153,7 @@ namespace WorshipHelperVSTO
         {
             var box = (sender as ComboBox);
             var translationName = box.SelectedItem as string;
+            log.Info($"Selecting translation: {translationName}");
 
             bible = OpenSongBibleReader.LoadTranslation(translationName);
 
@@ -150,6 +165,7 @@ namespace WorshipHelperVSTO
         {
             var box = (sender as ComboBox);
             var template = box.SelectedItem as ScriptureTemplate;
+            log.Info($"Selected template: {template.name}");
             var registryKey = Registry.CurrentUser.CreateSubKey(@"SOFTWARE\WorshipHelper");
             registryKey.SetValue("LastScriptureTemplate", template.name);
         }

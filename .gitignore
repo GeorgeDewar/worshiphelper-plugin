@@ -1,4 +1,5 @@
 obj
 bin
 .vs
-
+/packages/
+#!packages/repositories.config
