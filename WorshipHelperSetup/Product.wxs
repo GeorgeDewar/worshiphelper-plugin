@@ -102,11 +102,25 @@
 				<File Id="WorshipHelperVSTO_dll_manifest" KeyPath="yes"
 					  Name="WorshipHelperVSTO.dll.manifest" Source="$(var.WorshipHelperVSTO.TargetDir)"></File>
 			</Component>
+      <Component Id="WorshipHelper_dll_config_Component">
+        <File Id="WorshipHelperVSTO_dll_config" KeyPath="yes"
+					  Name="WorshipHelperVSTO.dll.config" Source="$(var.WorshipHelperVSTO.TargetDir)"></File>
+      </Component>
 			<Component Id="MSOfficeToolsCommon_dll_Component">
 				<File Id="MSOfficeToolsCommon_dll" KeyPath="yes"
 					  Name="Microsoft.Office.Tools.Common.v4.0.Utilities.dll"
 					  Source="$(var.WorshipHelperVSTO.TargetDir)"></File>
 			</Component>
+      <Component Id="log4net_dll_Component">
+        <File Id="log4net_dll" KeyPath="yes"
+					  Name="log4net.dll"
+					  Source="$(var.WorshipHelperVSTO.TargetDir)"></File>
+      </Component>
+      <Component Id="log4net_xml_Component">
+        <File Id="log4net_xml" KeyPath="yes"
+					  Name="log4net.xml"
+					  Source="$(var.WorshipHelperVSTO.TargetDir)"></File>
+      </Component>
 		</ComponentGroup>
 
 		<DirectoryRef Id="TEMPLATES_DIR">
