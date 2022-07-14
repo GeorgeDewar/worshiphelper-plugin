@@ -1,4 +1,5 @@
-﻿using Microsoft.Office.Interop.PowerPoint;
+﻿using log4net;
+using Microsoft.Office.Interop.PowerPoint;
 using System;
 using System.Diagnostics;
 using System.IO;
@@ -20,6 +21,7 @@ namespace WorshipHelperVSTO
         {
             _keyboardProc = KeyboardHookCallback;
             log4net.Config.XmlConfigurator.Configure();
+            LogManager.GetLogger("WorshipHelperVSTO").Info("Initalised logger");
             SetWindowsHooks();
         }
 
