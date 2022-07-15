@@ -116,11 +116,6 @@
 					  Name="log4net.dll"
 					  Source="$(var.WorshipHelperVSTO.TargetDir)"></File>
       </Component>
-      <Component Id="log4net_xml_Component">
-        <File Id="log4net_xml" KeyPath="yes"
-					  Name="log4net.xml"
-					  Source="$(var.WorshipHelperVSTO.TargetDir)"></File>
-      </Component>
 		</ComponentGroup>
 
 		<DirectoryRef Id="TEMPLATES_DIR">
