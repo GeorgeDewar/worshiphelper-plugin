@@ -13,7 +13,7 @@ namespace WorshipHelperVSTO
 
         private void btnScripture_Click(object sender, EventArgs e)
         {
-            new InsertScriptureForm().Show();
+            new InsertScriptureForm().ShowDialog();
             Close();
         }
 

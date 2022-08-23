@@ -4,11 +4,13 @@ using System;
 using System.Diagnostics;
 using System.IO;
 using System.Runtime.InteropServices;
+using System.Windows.Forms;
 
 namespace WorshipHelperVSTO
 {
     public partial class ThisAddIn
     {
+        private static ILog log;
         public static String appDataPath;
         public static String userDataPath = $@"{Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments)}\WorshipHelper";
 
@@ -16,11 +18,13 @@ namespace WorshipHelperVSTO
         private SafeNativeMethods.HookProc _keyboardProc;
 
         private IntPtr _hookIdKeyboard;
+        private AddContentLiveForm addContentLiveForm = new AddContentLiveForm();
 
         private void ThisAddIn_Startup(object sender, EventArgs e)
         {
             _keyboardProc = KeyboardHookCallback;
-            LogManager.GetLogger("WorshipHelperVSTO").Info("Initalised logger");
+            log = LogManager.GetLogger("WorshipHelperVSTO");
+            log.Info("Initalised logger");
             SetWindowsHooks();
         }
 
@@ -48,41 +52,42 @@ namespace WorshipHelperVSTO
 
         private IntPtr KeyboardHookCallback(int nCode, IntPtr wParam, IntPtr lParam)
         {
-            Application app = Globals.ThisAddIn.Application;
-
-            if (nCode >= 0)
+            try
             {
-                // Various attempts to decode this value as a proper struct were unsuccessful, with memory violation errors...
-                bool keyUp = (lParam.ToInt32() & 0xC0000000) != 0 && nCode == 0;
-                if (!keyUp)
+                if (nCode >= 0)
                 {
-                    return SafeNativeMethods.CallNextHookEx(_hookIdKeyboard, nCode, wParam, lParam);
-                }
-
-                bool formOpen = System.Windows.Forms.Application.OpenForms.Count > 0;
-                if (formOpen)
-                {
-                    Debug.WriteLine("Ignoring key press while form open");
-                    return SafeNativeMethods.CallNextHookEx(_hookIdKeyboard, nCode, wParam, lParam);
-                }
-
-                DocumentWindow presenterView = new WindowManager().GetPresenterView();
-                bool presenting = presenterView != null && presenterView.Active == Microsoft.Office.Core.MsoTriState.msoTrue;
-
-                if (presenting)
-                {
-                    char keyPressed = (char)wParam.ToInt32();
-                    if (keyPressed == 'A')
+                    // Various attempts to decode this value as a proper struct were unsuccessful, with memory violation errors...
+                    bool keyUp = (lParam.ToInt64() & 0xC0000000) != 0 && nCode == 0;
+                    if (!keyUp)
                     {
-                        // Insert song or scripture
-                        new AddContentLiveForm().Show();
-                    } else if (keyPressed == 'L')
+                        return SafeNativeMethods.CallNextHookEx(_hookIdKeyboard, nCode, wParam, lParam);
+                    }
+
+                    bool formOpen = System.Windows.Forms.Application.OpenForms.Count > 0;
+                    if (formOpen)
                     {
-                        // Go to logo
-                        Debug.WriteLine($"Key detected: Go to Logo");
+                        log.Debug("Ignoring key press while form open");
+                        return SafeNativeMethods.CallNextHookEx(_hookIdKeyboard, nCode, wParam, lParam);
+                    }
+
+                    DocumentWindow presenterView = new WindowManager().GetPresenterView();
+                    bool presenting = presenterView != null && presenterView.Active == Microsoft.Office.Core.MsoTriState.msoTrue;
+
+                    if (presenting)
+                    {
+                        char keyPressed = (char) wParam.ToInt64();
+                        log.Debug($"Key pressed while presenting: {wParam} ({keyPressed})");
+                        if (keyPressed == 17) // Ctrl key - our only choices are Ctrl, Shift and Caps Lock if we don't want to unblank a blanked slide as a side effect
+                        {
+                            // Insert song or scripture
+                            log.Debug("Opening Add Content Live form");
+                            addContentLiveForm.ShowDialog();
+                        }
                     }
                 }
-                
+            } catch (Exception e)
+            {
+                log.Error("Unexpected error while handling keypress", e);
             }
 
             return SafeNativeMethods.CallNextHookEx(_hookIdKeyboard, nCode, wParam, lParam);
