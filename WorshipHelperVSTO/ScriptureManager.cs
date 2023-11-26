@@ -21,6 +21,15 @@ namespace WorshipHelperVSTO
             // Copy the template from the template presentation, and close it
             Presentation templatePresentation = app.Presentations.Open(template.path, msoTrue, msoFalse, msoFalse);
             var currentSlide = newSlideFromTemplate(templatePresentation);
+
+            // We can't use PasteSourceFormatting very easily here, because it is asynchonous. If we do it in a separate thread and then wait, it works but is much slower.
+            // Instead we can explicitly copy the text colour to ensure it doesn't get overridden by the previous slide.
+            var templateSlide = templatePresentation.Slides[1];
+            var color1 = templateSlide.Shapes[2].TextFrame.TextRange.Font.Color.RGB;
+            var color2 = templateSlide.Shapes[3].TextFrame.TextRange.Font.Color.RGB;
+            currentSlide.Shapes[2].TextFrame.TextRange.Font.Color.RGB = color1;
+            currentSlide.Shapes[3].TextFrame.TextRange.Font.Color.RGB = color2;
+
             templatePresentation.Close();
 
             var objBodyTextBox = currentSlide.Shapes[2];
