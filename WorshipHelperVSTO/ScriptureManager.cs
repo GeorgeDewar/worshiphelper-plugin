@@ -1,5 +1,6 @@
 ﻿using log4net;
 using Microsoft.Office.Interop.PowerPoint;
+using System;
 using System.Linq;
 using static Microsoft.Office.Core.MsoTriState;
 
@@ -90,7 +91,17 @@ namespace WorshipHelperVSTO
                     }
                 }
             }
-        }
+
+            // Select the new slides, which will ensure that a future addition will go after it
+            int[] slideIndexes = new int[numSlidesAdded + 1];
+            for(int i=0; i<numSlidesAdded + 1; i++)
+            {
+                slideIndexes[i] = i + startSlideIndex;
+            }
+            log.Debug($"Selecting slides from {startSlideIndex} to {endSlideIndex}");
+            var range = app.ActivePresentation.Slides.Range(slideIndexes);
+            range.Select();
+        } 
 
         private Slide newSlideFromTemplate(Presentation templatePresentation)
         {
