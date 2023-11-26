@@ -39,7 +39,18 @@ namespace WorshipHelperVSTO
             var translation = bible.name;
             var chapter = bible.books.Where(item => item.name == bookName).First().chapters.Where(item => item.number == chapterNum).First();
             var verseList = chapter.verses.Where(verse => verse.number >= verseNumStart && verse.number <= verseNumEnd).OrderBy(verse => verse.number).ToList();
-            var reference = $"{bookName} {chapterNum}:{verseNumStart}-{verseNumEnd} ({translation})";
+            string verseReference;
+            if (verseNumStart == 1 && verseNumEnd == chapter.verses.Count)
+            {
+                verseReference = "";
+            } else if (verseNumStart == verseNumEnd)
+            {
+                verseReference = $":{verseNumStart}";
+            } else
+            {
+                verseReference = $":{verseNumStart}-{verseNumEnd}";
+            }
+            var reference = $"{bookName} {chapterNum}{verseReference} ({translation})";
 
             objBodyTextBox.TextFrame.TextRange.Text = "";
             objDescTextBox.TextFrame.TextRange.Text = reference;
