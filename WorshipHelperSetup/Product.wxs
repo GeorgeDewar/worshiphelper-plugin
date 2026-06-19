@@ -1,12 +1,11 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
-	<Product Id="*" Name="WorshipHelper" Language="1033" Version="!(bind.fileVersion.WorshipHelperVSTO_dll)" Manufacturer="WorshipHelper" UpgradeCode="cd4af055-5197-40b2-b7e7-ad60de11b453">
-		<Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" />
+﻿<Wix xmlns="http://wixtoolset.org/schemas/v4/wxs" xmlns:ui="http://wixtoolset.org/schemas/v4/wxs/ui">
+	<Package Name="WorshipHelper" Language="1033" Version="!(bind.fileVersion.WorshipHelperVSTO_dll)" Manufacturer="WorshipHelper" UpgradeCode="cd4af055-5197-40b2-b7e7-ad60de11b453" InstallerVersion="200">
+		
 
 		<MajorUpgrade AllowSameVersionUpgrades="yes" DowngradeErrorMessage="A newer version of [ProductName] is already installed." />
 		<MediaTemplate EmbedCab="yes" />
 
-		<UIRef Id="WixUI_Minimal" />
+		<ui:WixUI Id="WixUI_Minimal" />
 		<WixVariable Id="WixUILicenseRtf" Value="license.rtf" />
 
 		<Feature Id="ProductFeature" Title="WorshipHelper" Level="1">
@@ -22,29 +21,18 @@
 		</Feature>
 
 		<Property Id="VSTORUNTIMEREDIST">
-			<RegistrySearch
-			  Id="VSTORuntimeRedist"
-			  Root="HKLM"
-			  Key="SOFTWARE\Microsoft\VSTO Runtime Setup\v4R"
-			  Name="Version"
-			  Type="raw" />
+			<RegistrySearch Id="VSTORuntimeRedist" Root="HKLM" Key="SOFTWARE\Microsoft\VSTO Runtime Setup\v4R" Name="Version" Type="raw" />
 		</Property>
-		<Condition
-		  Message="The Visual Studio 2010 Tools for Office Runtime is not installed. 
-  Please download and install from 
-  http://www.microsoft.com/en-us/download/details.aspx?id=20479.">
-			<![CDATA[Installed OR VSTORUNTIMEREDIST>="10.0.30319"]]>
-		</Condition>
+		<Launch Condition="Installed OR VSTORUNTIMEREDIST&gt;=&quot;10.0.30319&quot;" Message="The Visual Studio 2010 Tools for Office Runtime is not installed.    Please download and install from    http://www.microsoft.com/en-us/download/details.aspx?id=20479." />
 
 		<!--<PropertyRef Id="NETFRAMEWORK40FULL"/>
     <Condition Message="This application requires .NET Framework 4.0.">
       <![CDATA[Installed OR NETFRAMEWORK40FULL]]>
     </Condition>-->
-	</Product>
+	</Package>
 
 	<Fragment>
-		<Directory Id="TARGETDIR" Name="SourceDir">
-			<Directory Id="ProgramFilesFolder">
+			<StandardDirectory Id="ProgramFilesFolder">
 				<Directory Id="INSTALLFOLDER" Name="WorshipHelper">
 					<Directory Id="DATA_DIR" Name="Data">
 						<Directory Id="TEMPLATES_DIR" Name="Templates" />
@@ -52,90 +40,59 @@
 					</Directory>
 				</Directory>
 				<Component Id="Registry_FriendlyName">
-					<RegistryValue Id="RegKey_FriendlyName" Root="HKCU"
-								   Key="Software\Microsoft\Office\PowerPoint\Addins\WorshipHelper"
-								   Name="FriendlyName"
-								   Value="WorshipHelper"
-								   Type="string" KeyPath="yes" />
+					<RegistryValue Id="RegKey_FriendlyName" Root="HKCU" Key="Software\Microsoft\Office\PowerPoint\Addins\WorshipHelper" Name="FriendlyName" Value="WorshipHelper" Type="string" KeyPath="yes" />
 				</Component>
 				<Component Id="Registry_Description">
-					<RegistryValue Id="RegKey_Description" Root="HKCU"
-								   Key="Software\Microsoft\Office\PowerPoint\Addins\WorshipHelper"
-								   Name="Description"
-								   Value="Easily build service presentations for your church"
-								   Type="string" KeyPath="yes" />
+					<RegistryValue Id="RegKey_Description" Root="HKCU" Key="Software\Microsoft\Office\PowerPoint\Addins\WorshipHelper" Name="Description" Value="Easily build service presentations for your church" Type="string" KeyPath="yes" />
 				</Component>
 				<Component Id="Registry_Manifest">
-					<RegistryValue Id="RegKey_Manifest" Root="HKCU"
-								   Key="Software\Microsoft\Office\PowerPoint\Addins\WorshipHelper"
-								   Name="Manifest" Value="[INSTALLFOLDER]WorshipHelperVSTO.vsto|vstolocal"
-								   Type="string" KeyPath="yes" />
+					<RegistryValue Id="RegKey_Manifest" Root="HKCU" Key="Software\Microsoft\Office\PowerPoint\Addins\WorshipHelper" Name="Manifest" Value="[INSTALLFOLDER]WorshipHelperVSTO.vsto|vstolocal" Type="string" KeyPath="yes" />
 				</Component>
 				<Component Id="Registry_LoadBehavior">
-					<RegistryValue Id="RegKey_LoadBehavior" Root="HKCU"
-								   Key="Software\Microsoft\Office\PowerPoint\Addins\WorshipHelper"
-								   Name="LoadBehavior" Value="3"
-								   Type="integer" KeyPath="yes" />
+					<RegistryValue Id="RegKey_LoadBehavior" Root="HKCU" Key="Software\Microsoft\Office\PowerPoint\Addins\WorshipHelper" Name="LoadBehavior" Value="3" Type="integer" KeyPath="yes" />
 				</Component>
 				<Component Id="RegistryEntries" Guid="{163A6B7C-CB58-4C6B-B4D3-FD4ACAA40295}">
-					<RegistryKey Root="HKCU"
-								 Key="Software\WorshipHelper"
-								 Action="create">
+					<RegistryKey Root="HKCU" Key="Software\WorshipHelper" ForceCreateOnInstall="yes">
 						<RegistryValue Type="string" Name="InstallLocation" Value="[INSTALLFOLDER]" />
 					</RegistryKey>
 				</Component>
-			</Directory>
-		</Directory>
-	</Fragment>
+			</StandardDirectory>
+		</Fragment>
 
 	<Fragment>
 		<ComponentGroup Id="ProductComponents" Directory="INSTALLFOLDER">
 			<Component Id="WorshipHelper_vsto_Component">
-				<File Id="WorshipHelper_vsto" KeyPath="yes"
-					  Name="WorshipHelperVSTO.vsto" Source="$(var.WorshipHelperVSTO.TargetDir)"></File>
+				<File Id="WorshipHelper_vsto" KeyPath="yes" Name="WorshipHelperVSTO.vsto" Source="$(var.WorshipHelperVSTO.TargetDir)"></File>
 			</Component>
-			<Component Id="WorshipHelper_dll_Component" >
-				<File Id="WorshipHelperVSTO_dll" KeyPath="yes"
-					  Name="WorshipHelperVSTO.dll" Source="$(var.WorshipHelperVSTO.TargetDir)" />
+			<Component Id="WorshipHelper_dll_Component">
+				<File Id="WorshipHelperVSTO_dll" KeyPath="yes" Name="WorshipHelperVSTO.dll" Source="$(var.WorshipHelperVSTO.TargetDir)" />
 			</Component>
 			<Component Id="WorshipHelper_dll_manifest_Component">
-				<File Id="WorshipHelperVSTO_dll_manifest" KeyPath="yes"
-					  Name="WorshipHelperVSTO.dll.manifest" Source="$(var.WorshipHelperVSTO.TargetDir)"></File>
+				<File Id="WorshipHelperVSTO_dll_manifest" KeyPath="yes" Name="WorshipHelperVSTO.dll.manifest" Source="$(var.WorshipHelperVSTO.TargetDir)"></File>
 			</Component>
       <Component Id="WorshipHelper_dll_config_Component">
-        <File Id="WorshipHelperVSTO_dll_config" KeyPath="yes"
-					  Name="WorshipHelperVSTO.dll.config" Source="$(var.WorshipHelperVSTO.TargetDir)"></File>
+        <File Id="WorshipHelperVSTO_dll_config" KeyPath="yes" Name="WorshipHelperVSTO.dll.config" Source="$(var.WorshipHelperVSTO.TargetDir)"></File>
       </Component>
 			<Component Id="MSOfficeToolsCommon_dll_Component">
-				<File Id="MSOfficeToolsCommon_dll" KeyPath="yes"
-					  Name="Microsoft.Office.Tools.Common.v4.0.Utilities.dll"
-					  Source="$(var.WorshipHelperVSTO.TargetDir)"></File>
+				<File Id="MSOfficeToolsCommon_dll" KeyPath="yes" Name="Microsoft.Office.Tools.Common.v4.0.Utilities.dll" Source="$(var.WorshipHelperVSTO.TargetDir)"></File>
 			</Component>
       <Component Id="log4net_dll_Component">
-        <File Id="log4net_dll" KeyPath="yes"
-					  Name="log4net.dll"
-					  Source="$(var.WorshipHelperVSTO.TargetDir)"></File>
+        <File Id="log4net_dll" KeyPath="yes" Name="log4net.dll" Source="$(var.WorshipHelperVSTO.TargetDir)"></File>
       </Component>
 		</ComponentGroup>
 
 		<DirectoryRef Id="TEMPLATES_DIR">
 			<Component Id="ScriptureTemplate_Component">
-				<File Id="Default" KeyPath="yes"
-					  Name="Default.pptx"
-					  Source="$(var.WorshipHelperVSTO.TargetDir)data\Templates\Default.pptx"></File>
+				<File Id="Default" KeyPath="yes" Name="Default.pptx" Source="$(var.WorshipHelperVSTO.TargetDir)data\Templates\Default.pptx"></File>
 			</Component>
 		</DirectoryRef>
 
 		<DirectoryRef Id="BIBLES_DIR">
 			<Component Id="Bible_NASB_Component">
-				<File Id="NASB_xmm" KeyPath="yes"
-					  Name="NASB.xmm"
-					  Source="$(var.WorshipHelperVSTO.TargetDir)data\Bibles\NASB.xmm"></File>
+				<File Id="NASB_xmm" KeyPath="yes" Name="NASB.xmm" Source="$(var.WorshipHelperVSTO.TargetDir)data\Bibles\NASB.xmm"></File>
 			</Component>
 			<Component Id="Bible_ESV_Component">
-				<File Id="ESV_xmm" KeyPath="yes"
-					  Name="ESV.xmm"
-					  Source="$(var.WorshipHelperVSTO.TargetDir)data\Bibles\ESV.xmm"></File>
+				<File Id="ESV_xmm" KeyPath="yes" Name="ESV.xmm" Source="$(var.WorshipHelperVSTO.TargetDir)data\Bibles\ESV.xmm"></File>
 			</Component>
 		</DirectoryRef>
 
