@@ -1,8 +1,8 @@
-﻿using Microsoft.Office.Core;
+﻿using log4net;
+using Microsoft.Office.Core;
 using Microsoft.Office.Interop.PowerPoint;
 using Microsoft.Win32;
 using System;
-using System.Diagnostics;
 using System.IO;
 using static Microsoft.Office.Core.MsoTriState;
 
@@ -10,10 +10,12 @@ namespace WorshipHelperVSTO
 {
     class SongManager
     {
+        private static readonly ILog log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
         Application app = Globals.ThisAddIn.Application;
 
         public void InsertSong()
         {
+            log.Info("Inserting song...");
             var registryKey = Registry.CurrentUser.CreateSubKey(@"SOFTWARE\WorshipHelper");
             var lastSongLocation = registryKey.GetValue("LastSongLocation") as string;
 
@@ -34,7 +36,7 @@ namespace WorshipHelperVSTO
 
         public void InsertSongFromFile(string filePath)
         {
-            Debug.WriteLine($"Inserting presentation from file at {filePath}");
+            log.Info($"Inserting presentation from file at {filePath}");
 
             try
             {
@@ -42,11 +44,13 @@ namespace WorshipHelperVSTO
                 var insertIndex = selectionManager.GetNextSlideIndex();
                 if (insertIndex > 1)
                 {
-                // Paste will already paste in the slide *after* the selected one
+                    // Paste will already paste in the slide *after* the selected one
+                    log.Debug($"Navigating to slide {insertIndex - 1} to insert the presentation");
                     selectionManager.GoToSlide(insertIndex - 1);
                 } else
                 {
-                // There must be no slides, no need to navigate
+                    // There must be no slides, no need to navigate
+                    log.Debug("No slides present, no need to navigate");
                 }
 
                 var sourcePresentation = app.Presentations.Open(filePath, msoTrue, msoFalse, msoFalse);
@@ -55,9 +59,10 @@ namespace WorshipHelperVSTO
 
                 app.CommandBars.ExecuteMso("PasteSourceFormatting");
                 //ScriptureManager.goToEnd();
+                log.Debug("Presentation inserted successfully");
             } catch (Exception e)
             {
-                Debug.WriteLine(e.Message);
+                log.Error("An error occurred while inserting the presentation", e);
                 System.Windows.Forms.MessageBox.Show($"An error occurred while inserting the song or presentation.\n\n{e.Message}");
             }
         }
